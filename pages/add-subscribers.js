@@ -1,6 +1,6 @@
-// pages/add-subscriber.js
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import Spinner from '../components/Spinner';
 
 export default function AddSubscriber() {
   const [email, setEmail] = useState('');
@@ -8,6 +8,7 @@ export default function AddSubscriber() {
   const [user, setUser] = useState(null);
   const [adminEmails, setAdminEmails] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false); // new submitting state
 
   useEffect(() => {
     const checkAdminAccess = async () => {
@@ -44,9 +45,13 @@ export default function AddSubscriber() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setSubmitting(true);
+
     const { data, error } = await supabase.from('subscribers').upsert([
       { email, expiry }
     ]);
+
+    setSubmitting(false);
 
     if (error) {
       alert('Error adding subscription: ' + error.message);
@@ -81,8 +86,21 @@ export default function AddSubscriber() {
           className="w-full border p-2 rounded"
           required
         />
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-          Add Subscription
+        <button
+          type="submit"
+          disabled={submitting}
+          className={`bg-blue-600 text-white px-4 py-2 rounded ${
+            submitting ? 'opacity-60 cursor-not-allowed' : ''
+          }`}
+        >
+          {submitting ? (
+            <span className="flex items-center justify-center space-x-2">
+              <Spinner />
+              <span>Adding...</span>
+            </span>
+          ) : (
+            'Add Subscription'
+          )}
         </button>
       </form>
     </div>

@@ -93,22 +93,30 @@ export default function Signals() {
 
       <div className="bg-gray-100 p-4 rounded-lg shadow-md">
         <div className="bg-gray-100 rounded-lg">
-  <div className="max-h-96 overflow-y-auto pr-2"> {/* 👈 scrollable wrapper */}
-    <ul className="space-y-2">
-      {signals.length > 0 ? (
-        signals.map((signal) => (
-          <li key={signal.id}>
-            {signal.direction === 'buy' ? '📈' : '📉'}{' '}
-            {signal.direction.toUpperCase()} {signal.pair} @ {signal.entry}, SL: {signal.sl}, TP: {signal.tp}
-          </li>
-        ))
-      ) : (
-        <li className="text-gray-500 italic">No signals available</li>
-      )}
-    </ul>
-  </div>
-</div>
-
+          <div className="max-h-96 overflow-y-auto pr-2"> {/* scrollable wrapper */}
+            <ul className="space-y-2">
+              {signals.length > 0 ? (
+                signals.map((signal) => (
+                  <li key={signal.id} className="flex flex-col space-y-1">
+                    <span>
+                      {signal.direction === 'buy' ? '📈' : '📉'}{' '}
+                      {signal.direction.toUpperCase()} {signal.pair} @ {signal.entry}, SL: {signal.sl}, TP: {signal.tp}
+                    </span>
+                    {signal.image_url && (
+                      <img
+                        src={signal.image_url}
+                        alt={`${signal.pair} signal image`}
+                        className="max-w-xs rounded shadow mt-1"
+                      />
+                    )}
+                  </li>
+                ))
+              ) : (
+                <li className="text-gray-500 italic">No signals available</li>
+              )}
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );

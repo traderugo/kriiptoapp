@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0",
+    "browser-image-compression": "^2.0.2",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import Spinner from '../components/Spinner';
 
 export default function Admins() {
   const [admins, setAdmins] = useState([]);
   const [email, setEmail] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchAdmins();
@@ -21,23 +23,28 @@ export default function Admins() {
   const addOrUpdateAdmin = async () => {
     if (!email) return;
 
+    setSubmitting(true);
+
     if (editingId) {
       const { error } = await supabase
         .from('admins')
         .update({ email })
         .eq('id', editingId);
+
       if (!error) {
         setEditingId(null);
         setEmail('');
-        fetchAdmins();
+        await fetchAdmins();
       }
     } else {
       const { error } = await supabase.from('admins').insert({ email });
       if (!error) {
         setEmail('');
-        fetchAdmins();
+        await fetchAdmins();
       }
     }
+
+    setSubmitting(false);
   };
 
   const startEditing = (admin) => {
@@ -51,8 +58,10 @@ export default function Admins() {
   };
 
   const deleteAdmin = async (id) => {
+    setSubmitting(true);
     const { error } = await supabase.from('admins').delete().eq('id', id);
-    if (!error) fetchAdmins();
+    if (!error) await fetchAdmins();
+    setSubmitting(false);
   };
 
   return (
@@ -66,16 +75,21 @@ export default function Admins() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="border px-3 py-2 rounded w-full"
+          disabled={submitting}
         />
         <button
           onClick={addOrUpdateAdmin}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          disabled={submitting}
+          className={`bg-blue-600 text-white px-4 py-2 rounded flex items-center justify-center ${
+            submitting ? 'opacity-60 cursor-not-allowed' : ''
+          }`}
         >
-          {editingId ? 'Update' : 'Add'}
+          {submitting ? <Spinner /> : editingId ? 'Update' : 'Add'}
         </button>
         {editingId && (
           <button
             onClick={cancelEditing}
+            disabled={submitting}
             className="bg-gray-400 text-white px-4 py-2 rounded"
           >
             Cancel
@@ -88,17 +102,22 @@ export default function Admins() {
       ) : (
         <ul className="space-y-2">
           {admins.map((admin) => (
-            <li key={admin.id} className="flex justify-between items-center bg-gray-100 p-3 rounded">
+            <li
+              key={admin.id}
+              className="flex justify-between items-center bg-gray-100 p-3 rounded"
+            >
               <span>{admin.email}</span>
               <div className="space-x-2">
                 <button
                   onClick={() => startEditing(admin)}
+                  disabled={submitting}
                   className="text-blue-500"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => deleteAdmin(admin.id)}
+                  disabled={submitting}
                   className="text-red-500"
                 >
                   Delete
