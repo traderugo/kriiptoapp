@@ -1,0 +1,29 @@
+ALTER TABLE subscribers ENABLE ROW LEVEL SECURITY
+
+-- Allow authenticated users to INSERT new rows
+CREATE POLICY "Allow insert for authenticated users"
+ON subscribers
+FOR INSERT
+TO authenticated
+WITH CHECK (true);
+
+-- Allow authenticated users to SELECT rows
+CREATE POLICY "Allow select for authenticated users"
+ON subscribers
+FOR SELECT
+TO authenticated
+USING (true);
+
+-- Allow authenticated users to UPDATE rows
+CREATE POLICY "Allow update for authenticated users"
+ON subscribers
+FOR UPDATE
+TO authenticated
+USING (true);
+
+-- Allow authenticated users to DELETE rows
+CREATE POLICY "Allow delete for authenticated users"
+ON subscribers
+FOR DELETE
+TO authenticated
+USING (true);
