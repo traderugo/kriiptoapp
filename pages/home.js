@@ -44,8 +44,7 @@ export default function AdminPage() {
 
   const adminLinks = [
     { href: "/signals", title: "Signals", description: "List of signals" },
-    { href: "/", title: "Monthly Journal", description: "Trade Journals categorized Monthly" },
-    { href: "/", title: "DOW Journal", description: "Trade Journals categorized by DOW" },
+    { href: "/", title: "Calculator", description: "Go to Trade Calculator" },
     { href: "/add-signals", title: "ADMIN", description: "Add Signals" },
     { href: "/add-subscribers", title: "ADMIN", description: "Add Subscribers" },
     { href: "/edit-subscribers", title: "ADMIN", description: "Edit Subscribers" },

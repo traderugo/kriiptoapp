@@ -1,29 +1,41 @@
-ALTER TABLE subscribers ENABLE ROW LEVEL SECURITY
+Formulas for Trade Calculator
 
--- Allow authenticated users to INSERT new rows
-CREATE POLICY "Allow insert for authenticated users"
-ON subscribers
-FOR INSERT
-TO authenticated
-WITH CHECK (true);
+Given Parameters:
+- capital = Total capital available
+- risk (%) = Percentage of capital risked per trade
+- entry = Entry price of the trade
+- tp = Take Profit price
+- sl = Stop Loss price
+- leverage = Leverage used on the trade
 
--- Allow authenticated users to SELECT rows
-CREATE POLICY "Allow select for authenticated users"
-ON subscribers
-FOR SELECT
-TO authenticated
-USING (true);
+Calculations:
 
--- Allow authenticated users to UPDATE rows
-CREATE POLICY "Allow update for authenticated users"
-ON subscribers
-FOR UPDATE
-TO authenticated
-USING (true);
+1. Risk Amount:
+   riskAmount = (capital * risk) / 100
 
--- Allow authenticated users to DELETE rows
-CREATE POLICY "Allow delete for authenticated users"
-ON subscribers
-FOR DELETE
-TO authenticated
-USING (true);
+2. Price Difference to Stop Loss:
+   priceDiffSL = |entry - sl|
+
+3. Price Difference to Take Profit:
+   priceDiffTP = |tp - entry|
+
+4. Position Size (units/contracts):
+   positionSize = riskAmount / priceDiffSL
+
+5. Notional Size:
+   notionalSize = positionSize * entry
+
+6. Margin Required:
+   margin = notionalSize / leverage
+
+7. Risk-Reward Ratio (RR):
+   RR = priceDiffTP / priceDiffSL
+
+8. ROI (based on risk % and RR):
+   ROI = RR * risk
+
+9. Percentage Change in Price:
+   pctChange = ((tp - entry) / entry) * 100
+
+10. Absolute ROI (relative to margin):
+    absROI = ((priceDiffTP * positionSize) / margin) * 100

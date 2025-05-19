@@ -6,10 +6,10 @@ export default function EditSubscribers() {
   const [subscribers, setSubscribers] = useState([]);
   const [adminEmails, setAdminEmails] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [countdowns, setCountdowns] = useState({});
 
   useEffect(() => {
     const fetchUserAndSubscribers = async () => {
-      // Step 1: Get current user session
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -22,7 +22,6 @@ export default function EditSubscribers() {
       const userEmail = session.user.email;
       setUser(session.user);
 
-      // Step 2: Fetch all admin emails
       const { data: admins, error } = await supabase
         .from('admins')
         .select('email');
@@ -36,13 +35,11 @@ export default function EditSubscribers() {
       const emails = admins.map((admin) => admin.email);
       setAdminEmails(emails);
 
-      // Step 3: Check if current user is an admin
       if (!emails.includes(userEmail)) {
         setLoading(false);
         return;
       }
 
-      // Step 4: Fetch subscribers
       const { data, error: subError } = await supabase
         .from('subscribers')
         .select('*');
@@ -53,6 +50,33 @@ export default function EditSubscribers() {
 
     fetchUserAndSubscribers();
   }, []);
+
+  // Countdown logic
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const updatedCountdowns = {};
+
+      subscribers.forEach((sub) => {
+        const expiry = new Date(sub.expiry).getTime();
+        const now = Date.now();
+        const diff = expiry - now;
+
+        if (diff <= 0) {
+          updatedCountdowns[sub.id] = 'Expired';
+        } else {
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+updatedCountdowns[sub.id] = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+      });
+
+      setCountdowns(updatedCountdowns);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [subscribers]);
 
   const handleUpdate = async (id, updatedExpiry) => {
     const { error } = await supabase
@@ -98,6 +122,7 @@ export default function EditSubscribers() {
             <tr className="bg-gray-200">
               <th className="p-2">Email</th>
               <th className="p-2">Expiry</th>
+              <th className="p-2">Time Left</th>
               <th className="p-2">Actions</th>
             </tr>
           </thead>
@@ -112,6 +137,9 @@ export default function EditSubscribers() {
                     onChange={(e) => handleUpdate(sub.id, e.target.value)}
                     className="border rounded px-2 py-1"
                   />
+                </td>
+                <td className="p-2 text-sm text-red-600 font-mono">
+                  {countdowns[sub.id] || '...'}
                 </td>
                 <td className="p-2 flex items-center space-x-2">
                   <span className="text-green-600 text-sm">Auto-saves</span>
