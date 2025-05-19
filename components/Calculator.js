@@ -170,7 +170,7 @@ export default function TradeCalculator() {
         {canCalculate ? (
           <div className="mt-8 bg-purple-50 rounded p-4 text-gray-800 space-y-3">
             <div>
-              <strong>Direction:</strong> {pct.toFixed(2) ? "Long" : "Short"}
+              <strong>Direction:</strong> {pctChange.toFixed(2) ? "Long" : "Short"}
             </div>
             <div>
               <strong>Margin:</strong> {margin.toFixed(2)}
