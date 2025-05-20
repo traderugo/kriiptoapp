@@ -210,7 +210,7 @@ export default function TradeCalculator() {
     <li>Input the stop loss (SL) price — the price where you’ll exit to limit your loss.</li>
     <li>Enter your leverage — the leverage multiplier for your trade (e.g., 10x).</li>
     <li>View the results below the form after entering all parameters.</li>
-    <li>Use the <strong>Reset</strong> button to clear all inputs and start fresh.</li>
+    <li>Use the <strong>Reset</strong> button to clear all inputs and start fresh...</li>
   </ol>
 </div>
       </div>
