@@ -100,15 +100,39 @@ export default function Signals() {
 
   // Outcome Count
   const outcomesCount = signals.reduce(
-    (acc, signal) => {
-      const outcome = signal.outcome?.toLowerCase();
-      if (outcome === 'win') acc.wins += 1;
-      else if (outcome === 'loss') acc.losses += 1;
-      else if (outcome === 'breakeven') acc.breakeven += 1;
-      return acc;
-    },
-    { wins: 0, losses: 0, breakeven: 0 }
+(acc, signal) => {
+    const outcome = signal.outcome?.toLowerCase();
+
+    if (outcome === 'win') acc.wins += 1;
+    else if (outcome === 'loss') acc.losses += 1;
+    else if (outcome === 'breakeven') acc.breakeven += 1;
+
+    acc.total += 1;
+
+    const { entry, sl, tp, direction } = signal;
+
+    if (entry && sl && tp && direction) {
+      let rr = 0;
+
+      if (direction.toLowerCase() === 'buy') {
+        rr = (tp - entry) / (entry - sl);
+      } else if (direction.toLowerCase() === 'sell') {
+        rr = (entry - tp) / (sl - entry);
+      }
+
+      // Only add valid RR values (avoid NaN or Infinity)
+      if (isFinite(rr) && rr > 0) {
+        acc.totalRR += rr;
+      }
+    }
+
+    return acc;
+  },
+  { wins: 0, losses: 0, breakeven: 0, total: 0, totalRR: 0 }
   );
+
+  const totalTrades = outcomesCount.wins + outcomesCount.losses + outcomesCount.breakeven;
+  const winRate = totalTrades > 0 ? ((outcomesCount.wins / totalTrades) * 100).toFixed(2) : '0.00';
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -121,10 +145,12 @@ export default function Signals() {
 
       <div className="shadow-md">
         <div className="mb-4 space-y-2">
-          <div className="flex justify-between bg-gray-100 p-3 rounded text-sm text-gray-700">
+          <div className="flex flex-col gap-2 bg-gray-100 p-3 rounded text-sm text-gray-700">
             <span>✅ Wins: <strong className="text-green-600">{outcomesCount.wins}</strong></span>
             <span>❌ Losses: <strong className="text-red-600">{outcomesCount.losses}</strong></span>
             <span>⚖️ Breakeven: <strong className="text-yellow-600">{outcomesCount.breakeven}</strong></span>
+            <span>📊 Win Rate: <strong className="text-blue-600">{winRate}%</strong></span>
+            <span>📈 Total RR: <strong className="text-purple-600">{outcomesCount.totalRR.toFixed(2)}</strong></span>
           </div>
 
           <div className="flex justify-between items-center">
@@ -146,19 +172,22 @@ export default function Signals() {
 
         <ul className="space-y-2 mb-4">
           {signals.length > 0 ? (
-            signals.map((signal) => (
-              <li key={signal.id} className="flex flex-col space-y-1 bg-gray-50 p-4 rounded-lg ">
-                <span>
-                  <strong>
-                    {new Date(signal.created_at).toLocaleString('en')} <br />
-                    {signal.direction === 'buy' ? '📈 LONG' : '📉 SHORT'} {signal.pair}/USDT @ {signal.entry}
-                  </strong><br />
-                  SL: {signal.sl}, TP: {signal.tp}<br />
-                  RR: {((signal.tp - signal.entry) / (signal.entry - signal.sl)).toFixed(2)},
-                  <strong> OUTCOME: {signal.outcome}</strong><br /><hr />
-                </span>
-              </li>
-            ))
+            signals.map((signal) => {
+              const rr = ((signal.tp - signal.entry) / (signal.entry - signal.sl)).toFixed(2);
+              return (
+                <li key={signal.id} className="flex flex-col space-y-1 bg-gray-50 p-4 rounded-lg ">
+                  <span>
+                    <strong>
+                      {new Date(signal.created_at).toLocaleString('en')} <br />
+                      {signal.direction === 'buy' ? '📈 LONG' : '📉 SHORT'} {signal.pair}/USDT @ {signal.entry}
+                    </strong><br />
+                    SL: {signal.sl}, TP: {signal.tp}<br />
+                    RR: {rr},
+                    <strong> OUTCOME: {signal.outcome}</strong><br /><hr />
+                  </span>
+                </li>
+              );
+            })
           ) : (
             <li className="text-gray-500 italic">No signals for this month</li>
           )}
