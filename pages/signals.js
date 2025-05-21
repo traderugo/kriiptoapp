@@ -151,6 +151,7 @@ export default function Signals() {
             <span>⚖️ Breakeven: <strong className="text-yellow-600">{outcomesCount.breakeven}</strong></span>
             <span>📊 Win Rate: <strong className="text-blue-600">{winRate}%</strong></span>
             <span>📈 Total RR: <strong className="text-purple-600">{outcomesCount.totalRR.toFixed(2)}</strong></span>
+            <span>📈 Derived RR: <strong className="text-purple-600">{((outcomesCount.totalRR)-(outcomesCount.losses)).toFixed(2)}</strong></span>
           </div>
 
           <div className="flex justify-between items-center">

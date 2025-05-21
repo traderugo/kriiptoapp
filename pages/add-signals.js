@@ -148,42 +148,64 @@ export default function AddSignals() {
   if (!user) return <p className="p-6 text-red-600">Access Denied</p>;
 
   // Calculated fields
-const capital = parseFloat(form.capital);
-const leverage = parseFloat(form.leverage);
-const entry = parseFloat(form.entry);
-const sl = parseFloat(form.sl);
-const riskPercent = parseFloat(form.risk);
+  const capital = parseFloat(form.capital);
+  const leverage = parseFloat(form.leverage);
+  const entry = parseFloat(form.entry);
+  const sl = parseFloat(form.sl);
+  const riskPercent = parseFloat(form.risk);
 
-const priceDiff = entry && sl ? Math.abs(entry - sl) : null;
-const riskAmount = capital && riskPercent ? (capital * riskPercent) / 100 : null;
-const positionSize = riskAmount && priceDiff ? riskAmount / priceDiff : null;
-const notionalSize = positionSize && entry ? positionSize * entry : null;
-const marginRequired = notionalSize && leverage ? notionalSize / leverage : null;
-
+  const priceDiff = entry && sl ? Math.abs(entry - sl) : null;
+  const riskAmount = capital && riskPercent ? (capital * riskPercent) / 100 : null;
+  const positionSize = riskAmount && priceDiff ? riskAmount / priceDiff : null;
+  const notionalSize = positionSize && entry ? positionSize * entry : null;
+  const marginRequired = notionalSize && leverage ? notionalSize / leverage : null;
 
   return (
     <div className="max-w-2xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4 text-blue-700">⚙️ Add / Edit Signals</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-8">
-        <input name="pair" placeholder="Pair (e.g. XAUUSD)" value={form.pair} onChange={handleChange} className="w-full p-2 border rounded" required />
-        <select name="direction" value={form.direction} onChange={handleChange} className="w-full p-2 border rounded">
-          <option value="buy">Buy</option>
-          <option value="sell">Sell</option>
-        </select>
-        <input name="entry" type="number" step="any" placeholder="Entry" value={form.entry} onChange={handleChange} className="w-full p-2 border rounded" required />
-        <input name="tp" type="number" step="any" placeholder="Take Profit" value={form.tp} onChange={handleChange} className="w-full p-2 border rounded" required />
-        <input name="sl" type="number" step="any" placeholder="Stop Loss" value={form.sl} onChange={handleChange} className="w-full p-2 border rounded" required />
-        <input name="risk" type="number" step="any" placeholder="Risk(%)" value={form.risk} onChange={handleChange} className="w-full p-2 border rounded" required />
-        <input name="capital" type="number" step="any" placeholder="Capital" value={form.capital} onChange={handleChange} className="w-full p-2 border rounded" required />
-        <input name="leverage" type="number" step="any" placeholder="Leverage" value={form.leverage} onChange={handleChange} className="w-full p-2 border rounded" required />
-        <input name="remarks" type="text" placeholder="Type your remarks here" value={form.remarks} onChange={handleChange} className="w-full p-2 border rounded" required />
-        <select name="outcome" value={form.outcome} onChange={handleChange} className="w-full p-2 border rounded">
-          <option value="">Select Outcome</option>
-          <option value="win">Win</option>
-          <option value="lose">Lose</option>
-          <option value="breakeven">Break Even</option>
-        </select>
+        {[
+          { label: "Pair", name: "pair", type: "text" },
+          { label: "Direction", name: "direction", type: "select", options: ["buy", "sell"] },
+          { label: "Entry", name: "entry", type: "number" },
+          { label: "Take Profit", name: "tp", type: "number" },
+          { label: "Stop Loss", name: "sl", type: "number" },
+          { label: "Risk (%)", name: "risk", type: "number" },
+          { label: "Capital", name: "capital", type: "number" },
+          { label: "Leverage", name: "leverage", type: "number" },
+          { label: "Remarks", name: "remarks", type: "text" },
+          { label: "Outcome", name: "outcome", type: "select", options: ["", "win", "loss", "breakeven"] },
+        ].map(({ label, name, type, options }) => (
+          <div key={name} className="flex items-center space-x-4">
+            <label htmlFor={name} className="w-32 font-medium text-gray-700">{label}:</label>
+            {type === "select" ? (
+              <select
+                name={name}
+                id={name}
+                value={form[name]}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+              >
+                {options.map(opt => (
+                  <option key={opt} value={opt}>{opt === '' ? 'Select Outcome' : opt.charAt(0).toUpperCase() + opt.slice(1)}</option>
+                ))}
+              </select>
+            ) : (
+              <input
+                name={name}
+                id={name}
+                type={type}
+                step={type === "number" ? "any" : undefined}
+                value={form[name]}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+                required
+              />
+            )}
+          </div>
+        ))}
+
         <button
           type="submit"
           disabled={submitting}
@@ -201,13 +223,18 @@ const marginRequired = notionalSize && leverage ? notionalSize / leverage : null
       </form>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-md space-y-2 mb-8">
-  <h2 className="font-semibold text-blue-700">📊 Calculated Info</h2>
-  <p><strong>Risk Amount:</strong> {riskAmount !== null ? riskAmount.toFixed(2) : 'N/A'}</p>
-  <p><strong>Position Size:</strong> {positionSize !== null ? positionSize.toFixed(2) : 'N/A'}</p>
-  <p><strong>Notional Size:</strong> {notionalSize !== null ? notionalSize.toFixed(2) : 'N/A'}</p>
-  <p><strong>Margin Required:</strong> {marginRequired !== null ? marginRequired.toFixed(2) : 'N/A'}</p>
-</div>
-
+        <h2 className="font-semibold text-blue-700">📊 Calculated Info</h2>
+        <p><strong>Capital:</strong> {form.capital || 'N/A'}</p>
+        <p><strong>Leverage:</strong> {form.leverage || 'N/A'}</p>
+        <p><strong>Entry:</strong> {form.entry || 'N/A'}</p>
+        <p><strong>Stop Loss:</strong> {form.sl || 'N/A'}</p>
+        <p><strong>Risk (%):</strong> {form.risk || 'N/A'}</p>
+        <hr />
+        <p><strong>Risk Amount:</strong> {riskAmount !== null ? riskAmount.toFixed(2) : 'N/A'}</p>
+        <p><strong>Position Size:</strong> {positionSize !== null ? positionSize.toFixed(2) : 'N/A'}</p>
+        <p><strong>Notional Size:</strong> {notionalSize !== null ? notionalSize.toFixed(2) : 'N/A'}</p>
+        <p><strong>Margin Required:</strong> {marginRequired !== null ? marginRequired.toFixed(2) : 'N/A'}</p>
+      </div>
 
       <ul className="space-y-4">
         {signals.map((signal) => (
