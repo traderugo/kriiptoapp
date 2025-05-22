@@ -56,14 +56,13 @@ export default function TradeCalculator() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r  to-blue-500 flex items-center justify-center ">
-      <div className="bg-white rounded-lg  max-w-md w-full p-4">
+    <div className="min-h-screen bg-gradient-to-r to-blue-500 flex items-center justify-center">
+      <div className="bg-white rounded-lg max-w-md w-full p-4 sm:p-6">
         <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
           Trade Calculator
         </h1>
 
         <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-          {/* ... all input fields ... */}
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
               Capital
@@ -156,7 +155,6 @@ export default function TradeCalculator() {
           </div>
         </form>
 
-        {/* Reset button below form */}
         <div className="mt-6 text-center">
           <button
             onClick={resetFields}
@@ -166,14 +164,14 @@ export default function TradeCalculator() {
             Reset
           </button>
         </div>
-        
+
         {canCalculate ? (
           <div className="mt-8 bg-purple-50 rounded p-4 text-gray-800 space-y-3">
             <div>
-              <strong>Direction:</strong> {pctChange.toFixed(2) ? "Long" : "Short"}
+              <strong>Direction:</strong> {numTp > numEntry ? "Long" : "Short"}
             </div>
             <div>
-              <strong>Margin:</strong> {margin.toFixed(2)}
+              <strong>Margin:</strong> ${margin.toFixed(2)}
             </div>
             <div>
               <strong>Risk-Reward Ratio (RR):</strong> {RR.toFixed(2)}
@@ -188,10 +186,10 @@ export default function TradeCalculator() {
               <strong>Percentage Change in Price:</strong> {pctChange.toFixed(2)}%
             </div>
             <div>
-              <strong>Position Size:</strong> {positionSize.toFixed(4)}
+              <strong>Position Size:</strong> {positionSize.toFixed(4)} units
             </div>
             <div>
-              <strong>Notional Size:</strong> {notionalSize.toFixed(2)}
+              <strong>Notional Size:</strong> ${notionalSize.toFixed(2)}
             </div>
           </div>
         ) : (
@@ -199,20 +197,24 @@ export default function TradeCalculator() {
             Please enter all parameters correctly (entry and SL cannot be equal).
           </p>
         )}
+
         <br />
+
         <div className="bg-purple-50 p-2 rounded-md text-gray-800 text-sm leading-relaxed">
-  <h2 className="font-semibold mb-2 text-lg text-purple-700">How to use this Trade Calculator:</h2>
-  <ol className="list-decimal list-inside space-y-1">
-    <li>Enter your total capital — the amount of money you want to trade with.</li>
-    <li>Set your risk percentage — the portion of your capital you’re willing to risk per trade (e.g., 1%).</li>
-    <li>Input the entry price — the price at which you plan to enter the trade.</li>
-    <li>Input the take profit (TP) price — the target price where you want to exit with a profit.</li>
-    <li>Input the stop loss (SL) price — the price where you’ll exit to limit your loss.</li>
-    <li>Enter your leverage — the leverage multiplier for your trade (e.g., 10x).</li>
-    <li>View the results below the form after entering all parameters.</li>
-    <li>Use the <strong>Reset</strong> button to clear all inputs and start fresh...</li>
-  </ol>
-</div>
+          <h2 className="font-semibold mb-2 text-lg text-purple-700">
+            How to use this Trade Calculator:
+          </h2>
+          <ol className="list-decimal list-inside space-y-1">
+            <li>Enter your total capital — the amount of money you want to trade with.</li>
+            <li>Set your risk percentage — the portion of your capital you’re willing to risk per trade (e.g., 1%).</li>
+            <li>Input the entry price — the price at which you plan to enter the trade.</li>
+            <li>Input the take profit (TP) price — the target price where you want to exit with a profit.</li>
+            <li>Input the stop loss (SL) price — the price where you’ll exit to limit your loss.</li>
+            <li>Enter your leverage — the leverage multiplier for your trade (e.g., 10x).</li>
+            <li>View the results below the form after entering all parameters.</li>
+            <li>Use the <strong>Reset</strong> button to clear all inputs and start fresh.</li>
+          </ol>
+        </div>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabase';
-import WhatsApp from "../components/Whatsapp";
+import MasterclassCTA from "../components/Cta";
 import Link from 'next/link';
 
 export default function AdminPage() {
@@ -54,11 +54,9 @@ export default function AdminPage() {
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">Home</h1>
-      
+      <MasterclassCTA />
       <div className="grid gap-6 md:grid-cols-2">
-              <WhatsApp phoneNumber="1234567890" message="Hello, I have a question!">
-       Click here to message Trader Ugo on WhatsApp to gain access
-      </WhatsApp>
+              
 
         {adminLinks.map((link, index) => (
           <Link
