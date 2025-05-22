@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase"
+import { supabase } from "../lib/supabase";
+import StickyShareBar from '../components/StickyShareBar';
+
 import Calculator from "../components/Calculator";
 
 import Link from "next/link";
@@ -55,7 +57,7 @@ export default function Home() {
         <Calculator />
        
         <br />
-        
+        <StickyShareBar url={"https://kryptokave.vercel.app"} message={"Check out this trading calculator that helps manage risk like a pro! 📊"} />
         <h1 className="text-2xl font-bold mb-4 text-center">Signal Portal</h1>
 
         {!user ? (

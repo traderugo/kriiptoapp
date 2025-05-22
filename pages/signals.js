@@ -180,7 +180,7 @@ export default function Signals() {
                   <span>
                     <strong>
                       {new Date(signal.created_at).toLocaleString('en')} <br />
-                      {signal.direction === 'buy' ? '📈 LONG' : '📉 SHORT'} {signal.pair}/USDT @ {signal.entry}
+                      {signal.direction === 'buy' ? '📈 LONG' : '📉 SHORT'} {signal.pair.toUpperCase()}/USDT @ {signal.entry}
                     </strong><br />
                     SL: {signal.sl}, TP: {signal.tp}<br />
                     RR: {rr},
