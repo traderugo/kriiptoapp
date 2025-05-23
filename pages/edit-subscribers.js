@@ -1,55 +1,61 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
 export default function EditSubscribers() {
   const [user, setUser] = useState(null);
   const [subscribers, setSubscribers] = useState([]);
-  const [filteredSubscribers, setFilteredSubscribers] = useState([]);
   const [adminEmails, setAdminEmails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [countdowns, setCountdowns] = useState({});
-  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUserAndSubscribers = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
 
-      if (!session?.user) return setLoading(false);
+      if (!session?.user) {
+        setLoading(false);
+        return;
+      }
 
       const userEmail = session.user.email;
       setUser(session.user);
 
       const { data: admins, error } = await supabase
         .from('admins')
-        .select('email');
+        .select('admin_email');
 
-      if (error) return setLoading(false);
+      if (error) {
+        console.error('Error fetching admins:', error.message);
+        setLoading(false);
+        return;
+      }
 
-      const emails = admins.map((admin) => admin.email);
+      const emails = admins.map((admin) => admin.admin_email);
       setAdminEmails(emails);
 
-      if (!emails.includes(userEmail)) return setLoading(false);
+      if (!emails.includes(userEmail)) {
+        setLoading(false);
+        return;
+      }
 
       const { data, error: subError } = await supabase
         .from('subscribers')
         .select('id, email, expiry, remarks');
 
-      if (!subError) {
-        setSubscribers(data);
-        setFilteredSubscribers(data);
-      }
-
+      if (!subError) setSubscribers(data);
       setLoading(false);
     };
 
-    fetchData();
+    fetchUserAndSubscribers();
   }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       const updatedCountdowns = {};
+
       subscribers.forEach((sub) => {
         const expiry = new Date(sub.expiry).getTime();
         const now = Date.now();
@@ -72,18 +78,6 @@ export default function EditSubscribers() {
     return () => clearInterval(interval);
   }, [subscribers]);
 
-  useEffect(() => {
-    if (search.trim() === '') {
-      setFilteredSubscribers(subscribers);
-    } else {
-      setFilteredSubscribers(
-        subscribers.filter((sub) =>
-          sub.email.toLowerCase().includes(search.toLowerCase())
-        )
-      );
-    }
-  }, [search, subscribers]);
-
   const handleUpdate = async (id, updatedExpiry) => {
     const { error } = await supabase
       .from('subscribers')
@@ -97,7 +91,15 @@ export default function EditSubscribers() {
     }
   };
 
-  const handleRemarksChange = async (id, newRemarks) => {
+  const debounce = (func, delay) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  const updateRemarks = async (id, newRemarks) => {
     const { error } = await supabase
       .from('subscribers')
       .update({ remarks: newRemarks })
@@ -110,80 +112,94 @@ export default function EditSubscribers() {
     }
   };
 
+  const debouncedRemarksChange = useCallback(debounce(updateRemarks, 600), []);
+
   const handleDelete = async (id) => {
-    if (!confirm('Delete this subscriber?')) return;
+    if (!confirm('Are you sure you want to delete this subscriber?')) return;
 
     const { error } = await supabase.from('subscribers').delete().eq('id', id);
+
     if (!error) {
       setSubscribers((prev) => prev.filter((sub) => sub.id !== id));
     }
   };
 
+  const filteredSubscribers = subscribers.filter((sub) =>
+    sub.email.toLowerCase().includes(filter.toLowerCase())
+  );
+
   if (loading) return <p className="p-6">Loading...</p>;
-  if (!user || !adminEmails.includes(user.email))
+  if (!user || !adminEmails.includes(user.email)) {
     return <p className="p-6 text-red-600">Access Denied</p>;
+  }
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-4">
-      <h1 className="text-2xl font-bold">🛠 Edit Subscribers</h1>
-      <p className="text-gray-700">Total Subscribers: {subscribers.length}</p>
+    <div className="max-w-4xl mx-auto p-4 sm:p-6">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4">🛠 Edit Subscribers</h1>
 
-      <input
-        type="text"
-        placeholder="Search by email..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="w-full border rounded px-3 py-2 text-sm"
-      />
+      <div className="mb-4">
+        <p className="text-sm text-gray-600 mb-1">
+          Total Subscribers: <strong>{filteredSubscribers.length}</strong>
+        </p>
+        <input
+          type="text"
+          placeholder="Filter by email..."
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="w-full sm:w-1/2 border px-3 py-2 rounded text-sm"
+        />
+      </div>
 
       {filteredSubscribers.length === 0 ? (
-        <p className="text-gray-500 mt-4">No subscribers found.</p>
+        <p>No subscribers found.</p>
       ) : (
-        <ul className="space-y-4 mt-4">
-          {filteredSubscribers.map((sub) => (
-            <li
-              key={sub.id}
-              className="border rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white shadow-sm"
-            >
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">{sub.email}</p>
-                <p className="text-xs text-red-600 font-mono">
-                  {countdowns[sub.id] || '...'}
-                </p>
-              </div>
-
-              <div className="flex-1">
-                <label className="block text-xs mb-1">Expiry:</label>
-                <input
-                  type="datetime-local"
-                  defaultValue={new Date(sub.expiry).toISOString().slice(0, 16)}
-                  onChange={(e) => handleUpdate(sub.id, e.target.value)}
-                  className="w-full border rounded px-2 py-1 text-sm"
-                />
-              </div>
-
-              <div className="flex-1">
-                <label className="block text-xs mb-1">Remarks:</label>
-                <input
-                  type="text"
-                  defaultValue={sub.remarks || ''}
-                  onBlur={(e) => handleRemarksChange(sub.id, e.target.value)}
-                  className="w-full border rounded px-2 py-1 text-sm"
-                />
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center gap-2">
-                <span className="text-green-600 text-xs">Auto-saves</span>
-                <button
-                  onClick={() => handleDelete(sub.id)}
-                  className="bg-red-600 text-white px-2 py-1 rounded text-sm hover:bg-red-700"
-                >
-                  Delete
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <div className="overflow-x-auto">
+          <table className="w-full border border-gray-300 text-left text-sm sm:text-base">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="p-2">Email</th>
+                <th className="p-2">Expiry</th>
+                <th className="p-2">Time Left</th>
+                <th className="p-2">Remarks</th>
+                <th className="p-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredSubscribers.map((sub) => (
+                <tr key={sub.id} className="border-t">
+                  <td className="p-2">{sub.email}</td>
+                  <td className="p-2">
+                    <input
+                      type="datetime-local"
+                      defaultValue={new Date(sub.expiry).toISOString().slice(0, 16)}
+                      onBlur={(e) => handleUpdate(sub.id, e.target.value)}
+                      className="w-full border rounded px-2 py-1 text-sm"
+                    />
+                  </td>
+                  <td className="p-2 text-xs text-red-600 font-mono">
+                    {countdowns[sub.id] || '...'}
+                  </td>
+                  <td className="p-2">
+                    <input
+                      type="text"
+                      defaultValue={sub.remarks || ''}
+                      onChange={(e) => debouncedRemarksChange(sub.id, e.target.value)}
+                      className="w-full border rounded px-2 py-1 text-sm"
+                    />
+                  </td>
+                  <td className="p-2">
+                    <button
+                      onClick={() => handleDelete(sub.id)}
+                      className="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 text-xs"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
