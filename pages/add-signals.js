@@ -152,6 +152,7 @@ export default function AddSignals() {
   const leverage = parseFloat(form.leverage);
   const entry = parseFloat(form.entry);
   const sl = parseFloat(form.sl);
+  const tp = parseFloat(form.tp);
   const riskPercent = parseFloat(form.risk);
 
   const priceDiff = entry && sl ? Math.abs(entry - sl) : null;
@@ -234,7 +235,7 @@ export default function AddSignals() {
         <p><strong>Risk (%):</strong> {form.risk || 'N/A'}</p>
         <hr />
         <p><strong>Risk Amount:</strong> {riskAmount !== null ? riskAmount.toFixed(2) : 'N/A'}</p>
-        <p><strong>Risk Reward Size:</strong> {riskReward !== null ? riskReward.toFixed(2) : 'N/A'}</p>
+        <p><strong>Risk Reward:</strong> {riskReward !== null ? riskReward.toFixed(2) : 'N/A'}</p>
         <p><strong>Notional Size:</strong> {notionalSize !== null ? notionalSize.toFixed(2) : 'N/A'}</p>
         <p><strong>Margin Required:</strong> {marginRequired !== null ? marginRequired.toFixed(2) : 'N/A'}</p>
         <p><strong>Margin Required:</strong> {marginRequired !== null ? marginRequired.toFixed(2) : 'N/A'}</p>
