@@ -70,6 +70,7 @@ export default function Signals() {
         .from('signals')
         .select('*')
         .gte('created_at', startOfMonth)
+        .eq('admin_email', "ugomail2017@gmail.com")
         .lte('created_at', endOfMonth)
         .order('created_at', { ascending: false });
 
