@@ -4,20 +4,19 @@ import { supabase } from '../lib/supabase';
 export default function EditSubscribers() {
   const [user, setUser] = useState(null);
   const [subscribers, setSubscribers] = useState([]);
+  const [filteredSubscribers, setFilteredSubscribers] = useState([]);
   const [adminEmails, setAdminEmails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [countdowns, setCountdowns] = useState({});
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
-    const fetchUserAndSubscribers = async () => {
+    const fetchData = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
 
-      if (!session?.user) {
-        setLoading(false);
-        return;
-      }
+      if (!session?.user) return setLoading(false);
 
       const userEmail = session.user.email;
       setUser(session.user);
@@ -26,35 +25,31 @@ export default function EditSubscribers() {
         .from('admins')
         .select('email');
 
-      if (error) {
-        console.error('Error fetching admins:', error.message);
-        setLoading(false);
-        return;
-      }
+      if (error) return setLoading(false);
 
       const emails = admins.map((admin) => admin.email);
       setAdminEmails(emails);
 
-      if (!emails.includes(userEmail)) {
-        setLoading(false);
-        return;
-      }
+      if (!emails.includes(userEmail)) return setLoading(false);
 
       const { data, error: subError } = await supabase
         .from('subscribers')
         .select('id, email, expiry, remarks');
 
-      if (!subError) setSubscribers(data);
+      if (!subError) {
+        setSubscribers(data);
+        setFilteredSubscribers(data);
+      }
+
       setLoading(false);
     };
 
-    fetchUserAndSubscribers();
+    fetchData();
   }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       const updatedCountdowns = {};
-
       subscribers.forEach((sub) => {
         const expiry = new Date(sub.expiry).getTime();
         const now = Date.now();
@@ -77,6 +72,18 @@ export default function EditSubscribers() {
     return () => clearInterval(interval);
   }, [subscribers]);
 
+  useEffect(() => {
+    if (search.trim() === '') {
+      setFilteredSubscribers(subscribers);
+    } else {
+      setFilteredSubscribers(
+        subscribers.filter((sub) =>
+          sub.email.toLowerCase().includes(search.toLowerCase())
+        )
+      );
+    }
+  }, [search, subscribers]);
+
   const handleUpdate = async (id, updatedExpiry) => {
     const { error } = await supabase
       .from('subscribers')
@@ -87,8 +94,6 @@ export default function EditSubscribers() {
       setSubscribers((prev) =>
         prev.map((sub) => (sub.id === id ? { ...sub, expiry: updatedExpiry } : sub))
       );
-    } else {
-      alert('Error updating subscriber.');
     }
   };
 
@@ -102,83 +107,83 @@ export default function EditSubscribers() {
       setSubscribers((prev) =>
         prev.map((sub) => (sub.id === id ? { ...sub, remarks: newRemarks } : sub))
       );
-    } else {
-      alert('Error updating remarks.');
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this subscriber?')) return;
+    if (!confirm('Delete this subscriber?')) return;
 
     const { error } = await supabase.from('subscribers').delete().eq('id', id);
-
     if (!error) {
       setSubscribers((prev) => prev.filter((sub) => sub.id !== id));
-    } else {
-      alert('Error deleting subscriber.');
     }
   };
 
   if (loading) return <p className="p-6">Loading...</p>;
-  if (!user || !adminEmails.includes(user.email)) {
+  if (!user || !adminEmails.includes(user.email))
     return <p className="p-6 text-red-600">Access Denied</p>;
-  }
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6">
-      <h1 className="text-xl sm:text-2xl font-bold mb-4">🛠 Edit Subscribers</h1>
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-4">
+      <h1 className="text-2xl font-bold">🛠 Edit Subscribers</h1>
+      <p className="text-gray-700">Total Subscribers: {subscribers.length}</p>
 
-      {subscribers.length === 0 ? (
-        <p>No subscribers found.</p>
+      <input
+        type="text"
+        placeholder="Search by email..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full border rounded px-3 py-2 text-sm"
+      />
+
+      {filteredSubscribers.length === 0 ? (
+        <p className="text-gray-500 mt-4">No subscribers found.</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full border border-gray-300 text-left text-sm sm:text-base">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="p-2 whitespace-nowrap">Email</th>
-                <th className="p-2 whitespace-nowrap">Expiry</th>
-                <th className="p-2 whitespace-nowrap">Time Left</th>
-                <th className="p-2 whitespace-nowrap">Remarks</th>
-                <th className="p-2 whitespace-nowrap">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {subscribers.map((sub) => (
-                <tr key={sub.id} className="border-t">
-                  <td className="p-2">{sub.email}</td>
-                  <td className="p-2">
-                    <input
-                      type="datetime-local"
-                      defaultValue={new Date(sub.expiry).toISOString().slice(0, 16)}
-                      onChange={(e) => handleUpdate(sub.id, e.target.value)}
-                      className="border rounded px-2 py-1 w-full text-xs sm:text-sm"
-                    />
-                  </td>
-                  <td className="p-2 text-xs sm:text-sm text-red-600 font-mono">
-                    {countdowns[sub.id] || '...'}
-                  </td>
-                  <td className="p-2">
-                    <input
-                      type="text"
-                      defaultValue={sub.remarks || ''}
-                      onBlur={(e) => handleRemarksChange(sub.id, e.target.value)}
-                      className="border rounded px-2 py-1 w-full text-xs sm:text-sm"
-                    />
-                  </td>
-                  <td className="p-2 flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                    <span className="text-green-600 text-xs sm:text-sm">Auto-saves</span>
-                    <button
-                      onClick={() => handleDelete(sub.id)}
-                      className="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 text-xs sm:text-sm"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <ul className="space-y-4 mt-4">
+          {filteredSubscribers.map((sub) => (
+            <li
+              key={sub.id}
+              className="border rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white shadow-sm"
+            >
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-900">{sub.email}</p>
+                <p className="text-xs text-red-600 font-mono">
+                  {countdowns[sub.id] || '...'}
+                </p>
+              </div>
+
+              <div className="flex-1">
+                <label className="block text-xs mb-1">Expiry:</label>
+                <input
+                  type="datetime-local"
+                  defaultValue={new Date(sub.expiry).toISOString().slice(0, 16)}
+                  onChange={(e) => handleUpdate(sub.id, e.target.value)}
+                  className="w-full border rounded px-2 py-1 text-sm"
+                />
+              </div>
+
+              <div className="flex-1">
+                <label className="block text-xs mb-1">Remarks:</label>
+                <input
+                  type="text"
+                  defaultValue={sub.remarks || ''}
+                  onBlur={(e) => handleRemarksChange(sub.id, e.target.value)}
+                  className="w-full border rounded px-2 py-1 text-sm"
+                />
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-2">
+                <span className="text-green-600 text-xs">Auto-saves</span>
+                <button
+                  onClick={() => handleDelete(sub.id)}
+                  className="bg-red-600 text-white px-2 py-1 rounded text-sm hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
