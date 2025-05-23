@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import StickyShareBar from '../components/StickyShareBar';
 import MasterclassBanner from '../components/MasterclassBanner';
-import Whatsapp from '../components/Whatsapp';
 
 import Calculator from "../components/Calculator";
 
@@ -88,22 +87,8 @@ export default function Home() {
             href="/home"
             className="block p-6 rounded-2xl shadow-md border border-gray-200 bg-white hover:shadow-lg hover:border-blue-500 transition"
           >
-            <h2 className="text-xl bg-blue font-semibold mb-2 text-white">Go to Home page</h2>
+            <h2 className="text-xl font-semibold mb-2 text-blue-600">Go to Home page</h2>
           </Link><br />
-          import { FaWhatsapp } from "react-icons/fa";
-
-
-    <a
-      href={groupLink}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="fixed bottom-4 right-4 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg flex items-center justify-center z-50 transition"
-    >
-      <FaWhatsapp size={28} />
-      <span className="ml-2 hidden sm:inline font-medium">Join WhatsApp Group</span>
-    </a>
-  
-          <br />
             <button
               onClick={logout}
               className="mb-4 bg-red-600 text-white p-2 rounded hover:bg-red-700"
