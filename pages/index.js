@@ -84,13 +84,17 @@ export default function Home() {
           <>
             <p className="mb-2">Logged in as: {user.email}</p>
            <a
-  href="https://chat.whatsapp.com/YOUR_INVITE_CODE"
+  href="https://chat.whatsapp.com/your-group-link"
   target="_blank"
   rel="noopener noreferrer"
-  className="block p-6 rounded-2xl shadow-md border border-gray-200 bg-white hover:shadow-lg hover:border-blue-500 transition"
+  className="block p-6 rounded-2xl shadow-md border border-gray-200 bg-white hover:shadow-lg hover:border-green-600 transition"
+  style={{ color: '#25D366' }}
 >
-  <h2 className="text-xl font-semibold mb-2 text-blue-600">Join Masterclass Group</h2>
-</a><br />
+  <h2 className="text-xl font-semibold mb-2" style={{ color: '#25D366' }}>
+    Join Masterclass Group
+  </h2>
+</a>
+<br />
                       <Link
             href="/home"
             className="block p-6 rounded-2xl shadow-md border border-gray-200 bg-white hover:shadow-lg hover:border-blue-500 transition"
