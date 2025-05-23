@@ -113,13 +113,7 @@ export default function Home() {
         )}
       </div>
       <footer className="mt-12 text-center text-sm text-gray-500 flex justify-center items-center space-x-2">
-  
-  <br />
-  <br />  
-  <br />
-  <br />
-  <br />
-
+  &copy; {new Date().getFullYear()} KryptoKave. All rights reserved.
 </footer>
 
     </main>
