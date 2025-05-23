@@ -122,6 +122,14 @@ export default function Home() {
   >
     Trader Ugo
   </a>
+  <br />
+  <br />
+  <br />  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+
 </footer>
 
     </main>
