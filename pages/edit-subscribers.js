@@ -20,12 +20,12 @@ export default function EditSubscribers() {
         return;
       }
 
-      const userEmail = session.user.email.toLowerCase().trim();
+      const userEmail = session.user.email;
       setUser(session.user);
 
       const { data: admins, error } = await supabase
         .from('admins')
-        .select('admin_email');
+        .select('email');
 
       if (error) {
         console.error('Error fetching admins:', error.message);
@@ -33,12 +33,8 @@ export default function EditSubscribers() {
         return;
       }
 
-      const emails = admins.map((admin) => admin.admin_email.toLowerCase().trim());
+      const emails = admins.map((admin) => admin.admin_email);
       setAdminEmails(emails);
-
-      console.log('Logged in user email:', userEmail);
-      console.log('Admin emails:', emails);
-      console.log('Is user admin:', emails.includes(userEmail));
 
       if (!emails.includes(userEmail)) {
         setLoading(false);
@@ -133,7 +129,7 @@ export default function EditSubscribers() {
   );
 
   if (loading) return <p className="p-6">Loading...</p>;
-  if (!user || !adminEmails.includes(user.email.toLowerCase().trim())) {
+  if (!user || !adminEmails.includes(user.email)) {
     return <p className="p-6 text-red-600">Access Denied</p>;
   }
 
