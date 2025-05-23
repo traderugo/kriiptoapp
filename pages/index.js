@@ -88,9 +88,9 @@ export default function Home() {
             href="/home"
             className="block p-6 rounded-2xl shadow-md border border-gray-200 bg-white hover:shadow-lg hover:border-blue-500 transition"
           >
-            <h2 className="text-xl font-semibold mb-2 text-blue-600">Go to Home page</h2>
+            <h2 className="text-xl bg-blue font-semibold mb-2 text-white">Go to Home page</h2>
           </Link><br />
-          <Whatsapp />
+          <Whatsapp phoneNumber={"2349051702146", message={"Go to Group on Whatsapp"}}/>
           <br />
             <button
               onClick={logout}
