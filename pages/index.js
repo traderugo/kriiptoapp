@@ -94,7 +94,6 @@ export default function Home() {
           >
             Log Out
           </button>
-          <MasterclassCTA />
         </>
       )}
     </div>
