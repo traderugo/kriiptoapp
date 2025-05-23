@@ -29,32 +29,32 @@ export default function AddSignals() {
 
   useEffect(() => {
     const checkAdmin = async () => {
-  const { data: sessionData } = await supabase.auth.getSession();
-  const sessionUser = sessionData?.session?.user;
+      const { data: sessionData } = await supabase.auth.getSession();
+      const sessionUser = sessionData?.session?.user;
 
-  if (!sessionUser) {
-    setLoading(false);
-    return;
-  }
+      if (!sessionUser) {
+        setLoading(false);
+        return;
+      }
 
-  const { data: adminData, error } = await supabase
-    .from('admins')
-    .select('admin_email')
-    .eq('email', sessionUser.email)
-    .single();
+      const { data: admins, error } = await supabase.from('admins').select('email');
+      if (error) {
+        console.error('Error fetching admin list:', error.message);
+        setLoading(false);
+        return;
+      }
 
-  if (error || !adminData) {
-    console.error('Error fetching admin record:', error?.message || 'Not found');
-    setLoading(false);
-    return;
-  }
+      const emails = admins.map((admin) => admin.email);
+      setAdminEmails(emails);
 
-  setUser(sessionUser);
-  setForm((prev) => ({ ...prev, admin_email: adminData.admin_email }));
-  await fetchSignals(1);
-  setLoading(false);
-};
+      if (emails.includes(sessionUser.email)) {
+        setUser(sessionUser);
+        setForm((prev) => ({ ...prev, admin_email: sessionUser.email }));
+        await fetchSignals(1);
+      }
 
+      setLoading(false);
+    };
 
     checkAdmin();
   }, []);
