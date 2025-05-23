@@ -90,7 +90,19 @@ export default function Home() {
           >
             <h2 className="text-xl bg-blue font-semibold mb-2 text-white">Go to Home page</h2>
           </Link><br />
-          <Whatsapp phoneNumber={"2349051702146", message={"Go to Group on Whatsapp"}}/>
+          import { FaWhatsapp } from "react-icons/fa";
+
+
+    <a
+      href={groupLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="fixed bottom-4 right-4 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg flex items-center justify-center z-50 transition"
+    >
+      <FaWhatsapp size={28} />
+      <span className="ml-2 hidden sm:inline font-medium">Join WhatsApp Group</span>
+    </a>
+  
           <br />
             <button
               onClick={logout}
