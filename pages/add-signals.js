@@ -15,6 +15,7 @@ export default function AddSignals() {
     remarks: '',
     capital: '',
     leverage: '',
+    admin_email: '',
   });
   const [editingId, setEditingId] = useState(null);
   const [user, setUser] = useState(null);
@@ -22,7 +23,6 @@ export default function AddSignals() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const signalsPerPage = 5;
   const [hasMore, setHasMore] = useState(false);
@@ -49,6 +49,7 @@ export default function AddSignals() {
 
       if (emails.includes(sessionUser.email)) {
         setUser(sessionUser);
+        setForm((prev) => ({ ...prev, admin_email: sessionUser.email }));
         await fetchSignals(1);
       }
 
@@ -97,40 +98,34 @@ export default function AddSignals() {
 
       if (!error) {
         setEditingId(null);
-        setForm({
-          pair: '',
-          direction: 'buy',
-          entry: '',
-          sl: '',
-          tp: '',
-          risk: '',
-          outcome: '',
-          leverage: '',
-          capital: '',
-          remarks: ''
-        });
+        resetForm();
         await fetchSignals(currentPage);
       }
     } else {
       const { error } = await supabase.from('signals').insert([form]);
       if (!error) {
-        setForm({
-          pair: '',
-          direction: 'buy',
-          entry: '',
-          sl: '',
-          tp: '',
-          risk: '',
-          outcome: '',
-          leverage: '',
-          capital: '',
-          remarks: ''
-        });
+        resetForm();
         await fetchSignals(currentPage);
       }
     }
 
     setSubmitting(false);
+  };
+
+  const resetForm = () => {
+    setForm({
+      pair: '',
+      direction: 'buy',
+      entry: '',
+      sl: '',
+      tp: '',
+      risk: '',
+      outcome: '',
+      remarks: '',
+      capital: '',
+      leverage: '',
+      admin_email: user?.email || '',
+    });
   };
 
   const handleEdit = (signal) => {
@@ -147,7 +142,7 @@ export default function AddSignals() {
   if (loading) return <Spinner />;
   if (!user) return <p className="p-6 text-red-600">Access Denied</p>;
 
-  // Calculated fields
+  // Calculated values
   const capital = parseFloat(form.capital);
   const leverage = parseFloat(form.leverage);
   const entry = parseFloat(form.entry);
@@ -179,7 +174,8 @@ export default function AddSignals() {
           { label: "Leverage", name: "leverage", type: "number" },
           { label: "Remarks", name: "remarks", type: "text" },
           { label: "Outcome", name: "outcome", type: "select", options: ["", "win", "loss", "breakeven"] },
-        ].map(({ label, name, type, options }) => (
+          { label: "Admin Email", name: "admin_email", type: "text", readOnly: true },
+        ].map(({ label, name, type, options, readOnly }) => (
           <div key={name} className="flex items-center space-x-4">
             <label htmlFor={name} className="w-32 font-medium text-gray-700">{label}:</label>
             {type === "select" ? (
@@ -203,7 +199,8 @@ export default function AddSignals() {
                 value={form[name]}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
-                required
+                readOnly={readOnly}
+                required={!readOnly}
               />
             )}
           </div>
@@ -237,7 +234,6 @@ export default function AddSignals() {
         <p><strong>Risk Amount:</strong> {riskAmount !== null ? riskAmount.toFixed(2) : 'N/A'}</p>
         <p><strong>Risk Reward:</strong> {riskReward !== null ? riskReward.toFixed(2) : 'N/A'}</p>
         <p><strong>Notional Size:</strong> {notionalSize !== null ? notionalSize.toFixed(2) : 'N/A'}</p>
-        <p><strong>Margin Required:</strong> {marginRequired !== null ? marginRequired.toFixed(2) : 'N/A'}</p>
         <p><strong>Margin Required:</strong> {marginRequired !== null ? marginRequired.toFixed(2) : 'N/A'}</p>
       </div>
 
