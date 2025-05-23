@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import StickyShareBar from '../components/StickyShareBar';
-import MasterclassBanner from '../components/MasterclassBanner';
+import MasterclassBanner   from '../components/MasterclassBanner';  
+import MasterclassCTA   from '../components/Cta';  
+import LandingPage from '../components/LandingPage';
 
-import Calculator from "../components/Calculator";
 
 import Link from "next/link";
 
@@ -47,71 +48,63 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-          <nav className="bg-blue-600 text-white w-full p-4 flex justify-between sticky top-0 z-50 shadow">
-      <div className="font-bold">Krypto Kave</div>
-      <div className="space-x-4 bg-white text-blue-600 p-2 rounded">
-      </div>
-    </nav>
+    <main className="min-h-screen flex flex-col items-center bg-black">
+  <nav className="bg-blue-600 text-white w-full px-4 py-3 flex justify-between items-center sticky top-0 z-50 shadow">
+    <div className="text-lg font-bold">Krypto Kave</div>
+  </nav>
 
-      <div className="bg-white p-6 w-full max-w-md">
-        <Calculator />
-       
-        <br />
-        <StickyShareBar url={"https://kryptokave.vercel.app"} message={"Check out this trading calculator that helps manage risk like a pro! 📊"} />
-        <hr />
-        <MasterclassBanner />
-        <br />
-        <h1 className="text-2xl font-bold mb-4 text-center">Sign in to join</h1>
+  <div className="w-full   flex flex-col gap-6">
+    <LandingPage />
 
-        {!user ? (
-          <>
-            <input
-              type="email"
-              className="w-full p-2 mb-4 border rounded"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <button
-              onClick={login}
-              className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-            >
-              Get Login Link
-            </button>
-          </>
-        ) : (
-          <>
-            <p className="mb-2">Logged in as: {user.email}</p>
-                      <Link
-            href="/home"
-            className="block p-6 rounded-2xl shadow-md border border-gray-200 bg-white hover:shadow-lg hover:border-blue-500 transition"
+   
+
+    <div className="bg-white p-6 w-full md:w-1/2  rounded shadow">
+      <h1 className="text-2xl font-bold mb-4 text-center">Signals</h1>
+
+      {!user ? (
+        <>
+          <input
+            type="email"
+            className="w-full p-2 mb-4 border rounded"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button
+            onClick={login}
+            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
           >
-            <h2 className="text-xl font-semibold mb-2 text-blue-600">Go to Home page</h2>
-          </Link><br />
-            <button
-              onClick={logout}
-              className="mb-4 bg-red-600 text-white p-2 rounded hover:bg-red-700"
-            >
-              Log Out
-            </button>
+            Get Login Link
+          </button>
+        </>
+      ) : (
+        <>
+          <p className="mb-2 text-center">Logged in as: {user.email}</p>
+                      
+          <Link
+            href="/home"
+            className="block p-6 rounded-2xl shadow-md border border-gray-200 bg-white hover:shadow-lg hover:border-blue-500 transition text-center"
+          >
+            <h2 className="text-xl font-semibold mb-2 text-blue-600">Go to Signals page</h2>
+          </Link>
+          <br />
+          <button
+            onClick={logout}
+            className="w-full bg-red-600 text-white p-2 rounded hover:bg-red-700"
+          >
+            Log Out
+          </button>
+          <MasterclassCTA />
+        </>
+      )}
+    </div>
+  </div>
 
-  
-          </>
-        )}
-      </div>
-      <footer className="mt-12 text-center text-sm text-gray-500 flex justify-center items-center space-x-2">
-  <span>Made with&nbsp;❤️&nbsp; by</span>
-  <a
-    href="https://twitter.com/trader_ugo"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="font-semibold text-blue-600 hover:underline"
-  >
-    Trader Ugo
-  </a>
-</footer>
+  <footer className="mt-12 mb-6 text-center text-sm text-gray-500">
+     &copy; {new Date().getFullYear()} KryptoKave. All rights reserved.
 
-    </main>
+  </footer>
+</main>
+
   );
 }
