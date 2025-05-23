@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import StickyShareBar from '../components/StickyShareBar';
 import MasterclassBanner from '../components/MasterclassBanner';
+import Whatsapp from '../components/Whatsapp';
 
 import Calculator from "../components/Calculator";
 
@@ -89,6 +90,8 @@ export default function Home() {
           >
             <h2 className="text-xl font-semibold mb-2 text-blue-600">Go to Home page</h2>
           </Link><br />
+          <Whatsapp />
+          <br />
             <button
               onClick={logout}
               className="mb-4 bg-red-600 text-white p-2 rounded hover:bg-red-700"
