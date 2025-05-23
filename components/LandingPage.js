@@ -44,16 +44,7 @@ export default function MasterclassPage() {
             <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded text-lg">Join WhatsApp Group</button>
           </a>
         </section>
-
-        <section className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow my-8">
-          <h2 className="text-2xl font-bold mb-4">📩 Register for the Masterclass</h2>
-          <form className="space-y-4">
-            <input type="text" placeholder="Full Name" className="w-full border rounded p-2" required />
-            <input type="email" placeholder="Email Address" className="w-full border rounded p-2" required />
-            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">Register Now</button>
-          </form>
-        </section>
-
+        
         <section className="max-w-4xl mx-auto p-6">
           <h2 className="text-2xl font-bold text-center mb-6">🌟 What Others Are Saying</h2>
           <div className="grid md:grid-cols-2 gap-6">
