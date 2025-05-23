@@ -155,10 +155,12 @@ export default function AddSignals() {
   const riskPercent = parseFloat(form.risk);
 
   const priceDiff = entry && sl ? Math.abs(entry - sl) : null;
+  const priceDiffTp = entry && tp ? Math.abs(tp - entry) : null;
   const riskAmount = capital && riskPercent ? (capital * riskPercent) / 100 : null;
   const positionSize = riskAmount && priceDiff ? riskAmount / priceDiff : null;
   const notionalSize = positionSize && entry ? positionSize * entry : null;
   const marginRequired = notionalSize && leverage ? notionalSize / leverage : null;
+  const riskReward = priceDiff && priceDiffTp ? priceDiffTp / priceDiff : null;
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -227,12 +229,14 @@ export default function AddSignals() {
         <p><strong>Capital:</strong> {form.capital || 'N/A'}</p>
         <p><strong>Leverage:</strong> {form.leverage || 'N/A'}</p>
         <p><strong>Entry:</strong> {form.entry || 'N/A'}</p>
+        <p><strong>Take Profit:</strong> {form.tp || 'N/A'}</p>
         <p><strong>Stop Loss:</strong> {form.sl || 'N/A'}</p>
         <p><strong>Risk (%):</strong> {form.risk || 'N/A'}</p>
         <hr />
         <p><strong>Risk Amount:</strong> {riskAmount !== null ? riskAmount.toFixed(2) : 'N/A'}</p>
-        <p><strong>Position Size:</strong> {positionSize !== null ? positionSize.toFixed(2) : 'N/A'}</p>
+        <p><strong>Risk Reward Size:</strong> {riskReward !== null ? riskReward.toFixed(2) : 'N/A'}</p>
         <p><strong>Notional Size:</strong> {notionalSize !== null ? notionalSize.toFixed(2) : 'N/A'}</p>
+        <p><strong>Margin Required:</strong> {marginRequired !== null ? marginRequired.toFixed(2) : 'N/A'}</p>
         <p><strong>Margin Required:</strong> {marginRequired !== null ? marginRequired.toFixed(2) : 'N/A'}</p>
       </div>
 
