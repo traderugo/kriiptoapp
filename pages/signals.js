@@ -69,6 +69,7 @@ export default function Signals() {
       const { data, error } = await supabase
         .from('signals')
         .select('*')
+        .where("admin_email", "eq", "ugomail2017@gmail.com")
         .gte('created_at', startOfMonth)
         .lte('created_at', endOfMonth)
         .order('created_at', { ascending: false });
