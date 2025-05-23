@@ -5,7 +5,7 @@ export default function Navbar() {
     <nav className="bg-blue-600 text-white p-4 flex justify-between sticky top-0 z-50 shadow">
       <div className="font-bold">KryptoKave</div>
       <div className="space-x-4 bg-white text-blue-600 p-2 rounded">
-        <Link href="/home">Home</Link>
+        <Link href="/home">Signals</Link>
       </div>
     </nav>
   );
