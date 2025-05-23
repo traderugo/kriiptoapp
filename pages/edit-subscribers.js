@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
 export default function EditSubscribers() {
@@ -7,7 +7,6 @@ export default function EditSubscribers() {
   const [adminEmails, setAdminEmails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [countdowns, setCountdowns] = useState({});
-  const [filter, setFilter] = useState('');
 
   useEffect(() => {
     const fetchUserAndSubscribers = async () => {
@@ -33,7 +32,7 @@ export default function EditSubscribers() {
         return;
       }
 
-      const emails = admins.map((admin) => admin.admin_email);
+      const emails = admins.map((admin) => admin.email);
       setAdminEmails(emails);
 
       if (!emails.includes(userEmail)) {
@@ -88,18 +87,12 @@ export default function EditSubscribers() {
       setSubscribers((prev) =>
         prev.map((sub) => (sub.id === id ? { ...sub, expiry: updatedExpiry } : sub))
       );
+    } else {
+      alert('Error updating subscriber.');
     }
   };
 
-  const debounce = (func, delay) => {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => func(...args), delay);
-    };
-  };
-
-  const updateRemarks = async (id, newRemarks) => {
+  const handleRemarksChange = async (id, newRemarks) => {
     const { error } = await supabase
       .from('subscribers')
       .update({ remarks: newRemarks })
@@ -109,10 +102,10 @@ export default function EditSubscribers() {
       setSubscribers((prev) =>
         prev.map((sub) => (sub.id === id ? { ...sub, remarks: newRemarks } : sub))
       );
+    } else {
+      alert('Error updating remarks.');
     }
   };
-
-  const debouncedRemarksChange = useCallback(debounce(updateRemarks, 600), []);
 
   const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this subscriber?')) return;
@@ -121,12 +114,10 @@ export default function EditSubscribers() {
 
     if (!error) {
       setSubscribers((prev) => prev.filter((sub) => sub.id !== id));
+    } else {
+      alert('Error deleting subscriber.');
     }
   };
-
-  const filteredSubscribers = subscribers.filter((sub) =>
-    sub.email.toLowerCase().includes(filter.toLowerCase())
-  );
 
   if (loading) return <p className="p-6">Loading...</p>;
   if (!user || !adminEmails.includes(user.email)) {
@@ -137,60 +128,48 @@ export default function EditSubscribers() {
     <div className="max-w-4xl mx-auto p-4 sm:p-6">
       <h1 className="text-xl sm:text-2xl font-bold mb-4">🛠 Edit Subscribers</h1>
 
-      <div className="mb-4">
-        <p className="text-sm text-gray-600 mb-1">
-          Total Subscribers: <strong>{filteredSubscribers.length}</strong>
-        </p>
-        <input
-          type="text"
-          placeholder="Filter by email..."
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="w-full sm:w-1/2 border px-3 py-2 rounded text-sm"
-        />
-      </div>
-
-      {filteredSubscribers.length === 0 ? (
+      {subscribers.length === 0 ? (
         <p>No subscribers found.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full border border-gray-300 text-left text-sm sm:text-base">
             <thead>
               <tr className="bg-gray-200">
-                <th className="p-2">Email</th>
-                <th className="p-2">Expiry</th>
-                <th className="p-2">Time Left</th>
-                <th className="p-2">Remarks</th>
-                <th className="p-2">Actions</th>
+                <th className="p-2 whitespace-nowrap">Email</th>
+                <th className="p-2 whitespace-nowrap">Expiry</th>
+                <th className="p-2 whitespace-nowrap">Time Left</th>
+                <th className="p-2 whitespace-nowrap">Remarks</th>
+                <th className="p-2 whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filteredSubscribers.map((sub) => (
+              {subscribers.map((sub) => (
                 <tr key={sub.id} className="border-t">
                   <td className="p-2">{sub.email}</td>
                   <td className="p-2">
                     <input
                       type="datetime-local"
                       defaultValue={new Date(sub.expiry).toISOString().slice(0, 16)}
-                      onBlur={(e) => handleUpdate(sub.id, e.target.value)}
-                      className="w-full border rounded px-2 py-1 text-sm"
+                      onChange={(e) => handleUpdate(sub.id, e.target.value)}
+                      className="border rounded px-2 py-1 w-full text-xs sm:text-sm"
                     />
                   </td>
-                  <td className="p-2 text-xs text-red-600 font-mono">
+                  <td className="p-2 text-xs sm:text-sm text-red-600 font-mono">
                     {countdowns[sub.id] || '...'}
                   </td>
                   <td className="p-2">
                     <input
                       type="text"
                       defaultValue={sub.remarks || ''}
-                      onChange={(e) => debouncedRemarksChange(sub.id, e.target.value)}
-                      className="w-full border rounded px-2 py-1 text-sm"
+                      onBlur={(e) => handleRemarksChange(sub.id, e.target.value)}
+                      className="border rounded px-2 py-1 w-full text-xs sm:text-sm"
                     />
                   </td>
-                  <td className="p-2">
+                  <td className="p-2 flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                    <span className="text-green-600 text-xs sm:text-sm">Auto-saves</span>
                     <button
                       onClick={() => handleDelete(sub.id)}
-                      className="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 text-xs"
+                      className="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 text-xs sm:text-sm"
                     >
                       Delete
                     </button>
