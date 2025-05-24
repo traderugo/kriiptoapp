@@ -6,6 +6,7 @@ import MasterclassBanner from '../components/MasterclassBanner';
 import Calculator from "../components/Calculator";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   const [user, setUser] = useState(null);
