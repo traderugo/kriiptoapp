@@ -48,12 +48,14 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-          <nav className="bg-blue-600 text-white w-full p-4 flex justify-between sticky top-0 z-50 shadow">
-      <div className="font-bold">Krypto Kave</div>
+     <nav className="bg-blue-600 text-white p-4 flex justify-between sticky top-0 z-50 shadow">
+      <div className="font-bold"><Link href="/">
+  <Image src="/logo.png" alt="Logo" width={150} height={150} />
+</Link></div>
       <div className="space-x-4 bg-white text-blue-600 p-2 rounded">
+        <Link href="/home">Signals</Link>
       </div>
     </nav>
-
       <div className="bg-white p-6 w-full max-w-md">
         <Calculator />
        
