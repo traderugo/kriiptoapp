@@ -49,7 +49,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-     <nav className="bg-blue-600 text-white p-4 flex justify-between sticky top-0 z-50 shadow">
+     <nav className="bg-blue-600 text-white w-full p-4 flex justify-between sticky top-0 z-50 shadow">
       <div className="font-bold"><Link href="/">
   <Image src="/logo.png" alt="Logo" width={150} height={150} />
 </Link></div>
