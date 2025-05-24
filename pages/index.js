@@ -94,7 +94,7 @@ export default function Home() {
   style={{ color: '#25D366' }}
 >
   <h2 className="text-xl font-semibold mb-2" style={{ color: '#25D366' }}>
-    Join Masterclass Group
+    Join Free Masterclass Group
   </h2>
 </a>
 <br />
