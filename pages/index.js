@@ -53,8 +53,8 @@ export default function Home() {
       <div className="font-bold"><Link href="/">
   <Image src="/logo.png" alt="Logo" width={150} height={150} />
 </Link></div>
-      <div className="space-x-4 bg-blue-400 text-white p-2 rounded">
-        <Link href="/home">Signals ⚙️</Link>
+      <div className="space-x-4 bg-blue-600 text-white p-2 rounded">
+        <Link href="/home">Signals 📡</Link>
       </div>
     </nav>
       <div className="bg-white p-6 w-full max-w-md">
