@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import StickyShareBar from '../components/StickyShareBar';
 import MasterclassBanner from '../components/MasterclassBanner';
+import PWAInstallPrompt from '../components/PWAInstallPrompt';
+import PWAiOSBanner from '../components/PWAiOSBanner';
 
 import Calculator from "../components/Calculator";
 
@@ -65,6 +67,9 @@ export default function Home() {
         <hr />
         <MasterclassBanner />
         <br />
+        <PWAInstallPrompt />
+      <PWAiOSBanner />
+         <hr />
         <h1 className="text-2xl font-bold mb-4 text-center">Sign in to join</h1>
 
         {!user ? (
