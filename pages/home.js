@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabase';
-import MasterclassCTA from "../components/Cta";
+import TelegramDMAccessBanner from "../components/Cta";
 import Link from 'next/link';
 
 export default function AdminPage() {
@@ -56,7 +56,8 @@ export default function AdminPage() {
       <h1 className="text-3xl font-bold mb-6 text-center">Signals</h1>
       
       <div className="grid gap-6 md:grid-cols-2">
-              
+              <TelegramDMAccessBanner />
+              <hr />
 
         {adminLinks.map((link, index) => (
           <Link

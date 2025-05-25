@@ -5,7 +5,7 @@ import React from 'react';
 const TelegramSubscribe = () => {
   return (
     <div className="max-w-md mx-auto p-4 bg-gray-100 rounded-lg shadow-lg text-center">
-      <h2 className="text-xl font-bold mb-2">Join Our Signal Channel</h2>
+      <h2 className="text-xl font-bold mb-2">Join Our Free Channel</h2>
       <p className="text-gray-700 mb-4">
         Get daily market insights, free trading signals, and exclusive content by joining our Telegram channel!
       </p>
