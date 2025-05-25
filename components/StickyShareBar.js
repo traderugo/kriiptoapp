@@ -29,17 +29,9 @@ export default function StickyShareBar({ url, message }) {
         >
           <FaFacebookF /> Facebook
         </a>
+        
       </div>
-
-      <span>Made with&nbsp;❤️&nbsp; by</span>
-      <a
-        href="https://twitter.com/trader_ugo"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="font-semibold text-blue-600 hover:underline"
-      >
-        Trader Ugo
-      </a>
+      
     </div>
   );
 }

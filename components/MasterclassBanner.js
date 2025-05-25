@@ -1,43 +1,24 @@
-// lib/MasterclassBanner.js
-import { useEffect, useState } from "react";
+// components/TelegramSubscribe.js
 
-export default function MasterclassBanner() {
-  const [countdown, setCountdown] = useState("Loading...");
+import React from 'react';
 
-  useEffect(() => {
-    const targetDate = new Date("2025-06-01T18:00:00Z");
-
-    const updateCountdown = () => {
-      const now = new Date();
-      const diff = targetDate - now;
-
-      if (diff <= 0) {
-        setCountdown("🎉 It's happening now!");
-        clearInterval(timer);
-        return;
-      }
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-
-      setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`);
-    };
-
-    updateCountdown();
-    const timer = setInterval(updateCountdown, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
+const TelegramSubscribe = () => {
   return (
-    <div className="mt-12 bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 rounded-lg shadow-lg text-center">
-      <h2 className="text-2xl font-bold mb-2">🚀 Intro to Crypto Masterclass</h2>
-      <p className="text-lg mb-4">
-        Unlock the fundamentals of crypto trading and investing in this one-time event!
+    <div className="max-w-md mx-auto p-4 bg-gray-100 rounded-lg shadow-lg text-center">
+      <h2 className="text-xl font-bold mb-2">Join Our Signal Channel</h2>
+      <p className="text-gray-700 mb-4">
+        Get daily market insights, free trading signals, and exclusive content by joining our Telegram channel!
       </p>
-      <p className="text-md font-semibold">Starts in: <span className="font-mono">{countdown}</span></p>
+      <a
+        href="https://t.me/YOUR_TELEGRAM_CHANNEL_LINK"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition duration-300"
+      >
+        Subscribe Now
+      </a>
     </div>
   );
-}
+};
+
+export default TelegramSubscribe;

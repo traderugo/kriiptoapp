@@ -56,21 +56,23 @@ export default function Home() {
   <Image src="/logo.png" alt="Logo" width={150} height={150} />
 </Link></div>
       <div className="space-x-4 bg-blue-600 text-white p-2 rounded">
-        <Link href="/home">Signals 📡</Link>
+        <Link href="/home"></Link>
       </div>
     </nav>
       <div className="bg-white p-6 w-full max-w-md">
         <Calculator />
-       
-        <br />
-        <StickyShareBar url={"https://kryptokave.vercel.app"} message={"Check out this trading calculator that helps manage risk like a pro! 📊"} />
-        <hr />
+       <StickyShareBar url={"https://kryptokave.vercel.app"} message={"Check out this trading calculator that helps manage risk like a pro! 📊"} />
+      <br />
+       <hr />
         <MasterclassBanner />
         <br />
         <PWAInstallPrompt />
       <PWAiOSBanner />
          <hr />
-        <h1 className="text-2xl font-bold mb-4 text-center">Sign in to join</h1>
+         <h2 className="text-2xl font-bold  mb-2">
+  Unlock VIP Signals—Your Edge in the Market Starts Here
+</h2>
+        <h3 className="text-2xl font-bold mb-4 text-center">Sign in to join</h3>
 
         {!user ? (
           <>
@@ -91,17 +93,7 @@ export default function Home() {
         ) : (
           <>
             <p className="mb-2">Logged in as: {user.email}</p>
-           <a
-  href="https://chat.whatsapp.com/your-group-link"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="block p-6 rounded-2xl shadow-md border border-gray-200 bg-white hover:shadow-lg hover:border-green-600 transition"
-  style={{ color: '#25D366' }}
->
-  <h2 className="text-xl font-semibold mb-2" style={{ color: '#25D366' }}>
-    Join Free Masterclass Group
-  </h2>
-</a>
+
 <br />
                       <Link
             href="/home"
@@ -120,8 +112,18 @@ export default function Home() {
           </>
         )}
       </div>
+       <br />
+        
       <footer className="mt-12 text-center text-sm text-gray-500 flex justify-center items-center space-x-2">
-  &copy; {new Date().getFullYear()} KryptoKave. All rights reserved.
+        <span>Made with&nbsp;❤️&nbsp; by</span>
+      <a
+        href="https://twitter.com/trader_ugo"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-semibold text-blue-600 hover:underline"
+      >
+        Trader Ugo
+      </a> <br />
 </footer>
 
     </main>
