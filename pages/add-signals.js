@@ -173,7 +173,7 @@ export default function AddSignals() {
           { label: "Capital", name: "capital", type: "number" },
           { label: "Leverage", name: "leverage", type: "number" },
           { label: "Remarks", name: "remarks", type: "text" },
-          { label: "Outcome", name: "outcome", type: "select", options: ["", "win", "loss", "breakeven"] },
+          { label: "Outcome", name: "outcome", type: "select", options: ["", "win", "loss", "breakeven", "missed"] },
           { label: "Admin Email", name: "admin_email", type: "text", readOnly: true },
         ].map(({ label, name, type, options, readOnly }) => (
           <div key={name} className="flex items-center space-x-4">
