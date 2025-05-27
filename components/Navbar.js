@@ -7,7 +7,7 @@ export default function Navbar() {
       <div className="font-bold"><Link href="/">
   <Image src="/logo.png" alt="Logo" width={150} height={150} />
 </Link></div>
-      <div className="space-x-4 bg-blue-600 text-white p-2 rounded">
+      <div className="space-x-4 bg-indigo-500 text-white p-2 rounded">
         <Link href="/home">Home 📡</Link>
       </div>
     </nav>
