@@ -169,9 +169,9 @@ export default function Signals() {
               return (
                 <li key={signal.id} className="flex flex-col space-y-1 bg-gray-50 p-4 rounded-lg ">
                   <span>
-                    <strong  className=' space-y-1 bg-gray-50 text-green-500'>
+                    <strong >
                       {new Date(signal.created_at).toLocaleString('en')} <br />
-                      {signal.direction === 'buy' ? '📈 LONG' : '📉 SHORT'} {signal.pair.toUpperCase()}/USDT @ {signal.entry}
+                      <span  className=' space-y-1 bg-gray-50 text-green-500'>{signal.direction === 'buy' ? '📈 LONG' : '📉 SHORT'} {signal.pair.toUpperCase()}/USDT @ {signal.entry}</span>
                     </strong>
                     <br />
                     SL: {signal.sl}, TP: {signal.tp}<br />
