@@ -175,7 +175,7 @@ export default function Signals() {
                     </strong>
                     <br />
                     SL: {signal.sl}, TP: {signal.tp}<br />
-                    RR: {rr}, <strong className='text-blue'> {signal.outcome.toUpperCase()}</strong><br />
+                    RR: {rr}, <strong className=' space-y-1 bg-gray-50 text-blue-500'> {signal.outcome.toUpperCase()}</strong><br />
                     <small>Remarks: {signal.remarks}</small><br />
                     <hr />
                   </span>
