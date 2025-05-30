@@ -66,7 +66,7 @@ export default function Admins() {
 
   return (
     <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-xl font-bold mb-4">👮 Admin Users</h1>
+      <h1 className="text-xl font-bold mb-4">👮 Admin Users Page</h1>
 
       <div className="flex gap-2 mb-4">
         <input
