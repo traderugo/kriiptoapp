@@ -59,7 +59,7 @@ export default function TradeCalculator() {
     <div className="min-h-screen bg-gradient-to-r to-blue-500 flex items-center justify-center">
       <div className="bg-white rounded-lg max-w-md w-full p-4 sm:p-6">
         <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
-          Trade Calculator
+          Risk Management Calculator
         </h1>
 
         <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>

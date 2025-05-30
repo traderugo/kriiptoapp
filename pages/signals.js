@@ -183,7 +183,7 @@ export default function Signals() {
                     </strong><br />
                     SL: {signal.sl}, TP: {signal.tp}<br />
                     RR: {rr},
-                    <strong> OUTCOME: {signal.outcome}</strong><br />
+                    <strong> Outcome: {signal.outcome}</strong><br />
                     <small> Remarks: {signal.remarks}</small><br />
                     <hr />
                   </span>
