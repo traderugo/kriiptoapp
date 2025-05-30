@@ -171,7 +171,7 @@ export default function Signals() {
                   <span>
                     <strong >
                       {new Date(signal.created_at).toLocaleString('en')} <br />
-                      <span  className=' space-y-1 bg-gray-50 text-green-500'>{signal.direction === 'buy' ? '📈 LONG' : '📉 SHORT'} {signal.pair.toUpperCase()}/USDT @ {signal.entry}</span>
+                      <span  className=' space-y-1 bg-gray-50 text-green-800'>{signal.direction === 'buy' ? '📈 LONG' : '📉 SHORT'} {signal.pair.toUpperCase()}/USDT @ {signal.entry}</span>
                     </strong>
                     <br />
                     SL: {signal.sl}, TP: {signal.tp}<br />
