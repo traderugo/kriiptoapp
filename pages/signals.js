@@ -169,7 +169,7 @@ export default function Signals() {
               return (
                 <li key={signal.id} className="flex flex-col space-y-1 bg-gray-50 p-4 rounded-lg ">
                   <span>
-                    <strong>
+                    <strong  className=' space-y-1 bg-gray-50 text-green-500'>
                       {new Date(signal.created_at).toLocaleString('en')} <br />
                       {signal.direction === 'buy' ? '📈 LONG' : '📉 SHORT'} {signal.pair.toUpperCase()}/USDT @ {signal.entry}
                     </strong>
