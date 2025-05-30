@@ -36,7 +36,6 @@ export default function Signals() {
     getUserAndSubscription();
   }, []);
 
-  // Countdown Logic
   useEffect(() => {
     if (!subscriber) return;
 
@@ -60,7 +59,6 @@ export default function Signals() {
     return () => clearInterval(interval);
   }, [subscriber]);
 
-  // Fetch Signals for the selected month
   useEffect(() => {
     const fetchSignals = async () => {
       const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).toISOString();
@@ -98,37 +96,33 @@ export default function Signals() {
     setCurrentDate((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
   };
 
-  // Outcome Count
   const outcomesCount = signals.reduce(
-(acc, signal) => {
-    const outcome = signal.outcome?.toLowerCase();
+    (acc, signal) => {
+      const outcome = signal.outcome?.toLowerCase();
+      const { entry, sl, tp, direction } = signal;
 
-    if (outcome === 'win') acc.wins += 1;
-    else if (outcome === 'loss') acc.losses += 1;
-    else if (outcome === 'breakeven') acc.breakeven += 1;
+      if (outcome === 'win') acc.wins += 1;
+      else if (outcome === 'loss') acc.losses += 1;
+      else if (outcome === 'breakeven') acc.breakeven += 1;
 
-    acc.total += 1;
+      acc.total += 1;
 
-    const { entry, sl, tp, direction } = signal;
+      if (entry && sl && tp && direction) {
+        let rr = 0;
+        if (direction.toLowerCase() === 'buy') {
+          rr = (tp - entry) / (entry - sl);
+        } else if (direction.toLowerCase() === 'sell') {
+          rr = (entry - tp) / (sl - entry);
+        }
 
-    if (entry && sl && tp && direction) {
-      let rr = 0;
-
-      if (direction.toLowerCase() === 'buy') {
-        rr = (tp - entry) / (entry - sl);
-      } else if (direction.toLowerCase() === 'sell') {
-        rr = (entry - tp) / (sl - entry);
+        if (isFinite(rr) && rr > 0 && outcome === 'win') {
+          acc.totalRR += rr;
+        }
       }
 
-      // Only add valid RR values (avoid NaN or Infinity)
-      if (isFinite(rr) && rr > 0) {
-        acc.totalRR += rr;
-      }
-    }
-
-    return acc;
-  },
-  { wins: 0, losses: 0, breakeven: 0, total: 0, totalRR: 0 }
+      return acc;
+    },
+    { wins: 0, losses: 0, breakeven: 0, total: 0, totalRR: 0 }
   );
 
   const totalTrades = outcomesCount.wins + outcomesCount.losses + outcomesCount.breakeven;
@@ -150,21 +144,15 @@ export default function Signals() {
             <span>❌ Losses: <strong className="text-red-600">{outcomesCount.losses}</strong></span>
             <span>⚖️ Breakeven: <strong className="text-yellow-600">{outcomesCount.breakeven}</strong></span>
             <span>📊 Win Rate: <strong className="text-blue-600">{winRate}%</strong></span>
-            <span>📈 Total RR: <strong className="text-purple-600">{outcomesCount.totalRR.toFixed(2)}</strong></span>
+            <span>📈 Total RR (Wins Only): <strong className="text-purple-600">{outcomesCount.totalRR.toFixed(2)}</strong></span>
           </div>
 
           <div className="flex justify-between items-center">
-            <button
-              onClick={goToPreviousMonth}
-              className="bg-blue-500 text-white px-3 py-1 rounded"
-            >
+            <button onClick={goToPreviousMonth} className="bg-blue-500 text-white px-3 py-1 rounded">
               ⬅️ Prev
             </button>
             <span className="font-semibold px-4 text-gray-700">{monthYear}</span>
-            <button
-              onClick={goToNextMonth}
-              className="bg-blue-500 text-white px-3 py-1 rounded"
-            >
+            <button onClick={goToNextMonth} className="bg-blue-500 text-white px-3 py-1 rounded">
               Next ➡️
             </button>
           </div>
@@ -173,18 +161,21 @@ export default function Signals() {
         <ul className="space-y-2 mb-4">
           {signals.length > 0 ? (
             signals.map((signal) => {
-              const rr = ((signal.tp - signal.entry) / (signal.entry - signal.sl)).toFixed(2);
+              const rr =
+                signal.direction?.toLowerCase() === 'buy'
+                  ? ((signal.tp - signal.entry) / (signal.entry - signal.sl)).toFixed(2)
+                  : ((signal.entry - signal.tp) / (signal.sl - signal.entry)).toFixed(2);
               return (
                 <li key={signal.id} className="flex flex-col space-y-1 bg-gray-50 p-4 rounded-lg ">
                   <span>
                     <strong>
                       {new Date(signal.created_at).toLocaleString('en')} <br />
                       {signal.direction === 'buy' ? '📈 LONG' : '📉 SHORT'} {signal.pair.toUpperCase()}/USDT @ {signal.entry}
-                    </strong><br />
+                    </strong>
+                    <br />
                     SL: {signal.sl}, TP: {signal.tp}<br />
-                    RR: {rr},
-                    <strong> Outcome: {signal.outcome}</strong><br />
-                    <small> Remarks: {signal.remarks}</small><br />
+                    RR: {rr}, <strong>Outcome: {signal.outcome}</strong><br />
+                    <small>Remarks: {signal.remarks}</small><br />
                     <hr />
                   </span>
                 </li>
