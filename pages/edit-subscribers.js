@@ -24,10 +24,7 @@ export default function EditSubscribers() {
       const userEmail = session.user.email;
       setUser(session.user);
 
-      const { data: admins, error } = await supabase
-        .from('admins')
-        .select('email');
-
+      const { data: admins, error } = await supabase.from('admins').select('email');
       if (error) {
         console.error('Error fetching admins:', error.message);
         setLoading(false);
@@ -66,9 +63,7 @@ export default function EditSubscribers() {
           updatedCountdowns[sub.id] = 'Expired';
         } else {
           const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-          const hours = Math.floor(
-            (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-          );
+          const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
           const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
           const seconds = Math.floor((diff % (1000 * 60)) / 1000);
           updatedCountdowns[sub.id] = `${days}d ${hours}h ${minutes}m ${seconds}s`;
@@ -82,16 +77,11 @@ export default function EditSubscribers() {
   }, [subscribers]);
 
   const handleUpdate = async (id, updatedExpiry) => {
-    const { error } = await supabase
-      .from('subscribers')
-      .update({ expiry: updatedExpiry })
-      .eq('id', id);
+    const { error } = await supabase.from('subscribers').update({ expiry: updatedExpiry }).eq('id', id);
 
     if (!error) {
       setSubscribers((prev) =>
-        prev.map((sub) =>
-          sub.id === id ? { ...sub, expiry: updatedExpiry } : sub
-        )
+        prev.map((sub) => (sub.id === id ? { ...sub, expiry: updatedExpiry } : sub))
       );
     } else {
       alert('Error updating subscriber.');
@@ -99,10 +89,7 @@ export default function EditSubscribers() {
   };
 
   const handleRemarksChange = async (id, newRemarks) => {
-    const { error } = await supabase
-      .from('subscribers')
-      .update({ remarks: newRemarks })
-      .eq('id', id);
+    const { error } = await supabase.from('subscribers').update({ remarks: newRemarks }).eq('id', id);
 
     if (!error) {
       setSubscribers((prev) =>
@@ -126,10 +113,11 @@ export default function EditSubscribers() {
   };
 
   const filteredSubscribers = useMemo(() => {
-    return subscribers.filter((sub) =>
-      sub.email.toLowerCase().includes(search.toLowerCase()) &&
-      sub.affiliate?.toLowerCase().includes(searchAffiliate.toLowerCase())
-    );
+    return subscribers.filter((sub) => {
+      const emailMatch = sub.email.toLowerCase().includes(search.toLowerCase());
+      const affiliateMatch = sub.affiliate?.toLowerCase().includes(searchAffiliate.toLowerCase());
+      return emailMatch && affiliateMatch;
+    });
   }, [search, searchAffiliate, subscribers]);
 
   if (loading) return <p className="p-6">Loading...</p>;
@@ -142,11 +130,11 @@ export default function EditSubscribers() {
       <h1 className="text-2xl font-bold mb-6 flex justify-between items-center">
         <span>🛠 Edit Subscribers</span>
         <span className="text-gray-600 text-sm">
-          Total: <strong>{subscribers.length}</strong>
+          Total: <strong>{subscribers.length}</strong> | Shown: <strong>{filteredSubscribers.length}</strong>
         </span>
       </h1>
 
-      <div className="grid sm:grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <input
           type="search"
           placeholder="Search subscribers by email..."
@@ -159,7 +147,7 @@ export default function EditSubscribers() {
           placeholder="Search by affiliate..."
           value={searchAffiliate}
           onChange={(e) => setSearchAffiliate(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
         />
       </div>
 
@@ -177,12 +165,8 @@ export default function EditSubscribers() {
               </div>
 
               <div className="mb-2">
-                <label className="block text-xs font-medium text-gray-700">
-                  Affiliate
-                </label>
-                <p className="text-sm text-gray-800 truncate">
-                  {sub.affiliate || '—'}
-                </p>
+                <label className="block text-xs font-medium text-gray-700">Affiliate</label>
+                <p className="text-sm text-gray-800 truncate">{sub.affiliate || '—'}</p>
               </div>
 
               <label className="block mb-2 text-xs font-medium text-gray-700">
