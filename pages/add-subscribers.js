@@ -5,10 +5,11 @@ import Spinner from '../components/Spinner';
 export default function AddSubscriber() {
   const [email, setEmail] = useState('');
   const [expiry, setExpiry] = useState('');
+  const [affiliate, setAffiliate] = useState(''); // new affiliate state
   const [user, setUser] = useState(null);
   const [adminEmails, setAdminEmails] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false); // new submitting state
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const checkAdminAccess = async () => {
@@ -23,9 +24,7 @@ export default function AddSubscriber() {
 
       setUser(session.user);
 
-      const { data: admins, error } = await supabase
-        .from('admins')
-        .select('email');
+      const { data: admins, error } = await supabase.from('admins').select('email');
 
       if (error) {
         console.error('Error fetching admins:', error.message);
@@ -48,7 +47,7 @@ export default function AddSubscriber() {
     setSubmitting(true);
 
     const { data, error } = await supabase.from('subscribers').upsert([
-      { email, expiry }
+      { email, expiry, affiliate }
     ]);
 
     setSubmitting(false);
@@ -59,6 +58,7 @@ export default function AddSubscriber() {
       alert('Subscription added successfully!');
       setEmail('');
       setExpiry('');
+      setAffiliate('');
     }
   };
 
@@ -85,6 +85,13 @@ export default function AddSubscriber() {
           onChange={(e) => setExpiry(e.target.value)}
           className="w-full border p-2 rounded"
           required
+        />
+        <input
+          type="text"
+          placeholder="Affiliate (optional)"
+          value={affiliate}
+          onChange={(e) => setAffiliate(e.target.value)}
+          className="w-full border p-2 rounded"
         />
         <button
           type="submit"
