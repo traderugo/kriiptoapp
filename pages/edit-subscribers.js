@@ -8,6 +8,7 @@ export default function EditSubscribers() {
   const [loading, setLoading] = useState(true);
   const [countdowns, setCountdowns] = useState({});
   const [search, setSearch] = useState('');
+  const [searchAffiliate, setSearchAffiliate] = useState('');
 
   useEffect(() => {
     const fetchUserAndSubscribers = async () => {
@@ -126,9 +127,10 @@ export default function EditSubscribers() {
 
   const filteredSubscribers = useMemo(() => {
     return subscribers.filter((sub) =>
-      sub.email.toLowerCase().includes(search.toLowerCase())
+      sub.email.toLowerCase().includes(search.toLowerCase()) &&
+      sub.affiliate?.toLowerCase().includes(searchAffiliate.toLowerCase())
     );
-  }, [search, subscribers]);
+  }, [search, searchAffiliate, subscribers]);
 
   if (loading) return <p className="p-6">Loading...</p>;
   if (!user || !adminEmails.includes(user.email)) {
@@ -144,13 +146,22 @@ export default function EditSubscribers() {
         </span>
       </h1>
 
-      <input
-        type="search"
-        placeholder="Search subscribers by email..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="w-full mb-6 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
+      <div className="grid sm:grid-cols-2 gap-4 mb-6">
+        <input
+          type="search"
+          placeholder="Search subscribers by email..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <input
+          type="search"
+          placeholder="Search by affiliate..."
+          value={searchAffiliate}
+          onChange={(e) => setSearchAffiliate(e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
 
       {filteredSubscribers.length === 0 ? (
         <p className="text-center text-gray-500">No subscribers found.</p>
