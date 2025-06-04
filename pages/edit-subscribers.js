@@ -128,7 +128,7 @@ export default function EditSubscribers() {
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6">
       <h1 className="text-2xl font-bold mb-6 flex justify-between items-center">
-        <span>🛠 Edit Subscribers</span>
+        <span>🛠 Subscribers</span>
         <span className="text-gray-600 text-sm">
           Total: <strong>{subscribers.length}</strong> | Shown: <strong>{filteredSubscribers.length}</strong>
         </span>
