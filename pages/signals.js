@@ -177,7 +177,7 @@ export default function Signals() {
                     SL: {signal.sl}, TP: {signal.tp}<br />
                     RR: {rr}, <strong className=' space-y-1 bg-gray-50 text-blue-500'> {signal.outcome.toUpperCase()}</strong><br />
                     <small>Remarks: {signal.remarks}</small><br />
-                    <small>{signal.admin_email}</small><br />
+                    <small>{signal.admin_email.replace(/@gmail\.com$/i, '')}</small><br />
                     <hr />
                   </span>
                 </li>
