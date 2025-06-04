@@ -43,7 +43,7 @@ export default function EditSubscribers() {
 
       const { data, error: subError } = await supabase
         .from('subscribers')
-        .select('id, email, expiry, remarks');
+        .select('id, email, expiry, remarks, affiliate');
 
       if (!subError) setSubscribers(data);
       setLoading(false);
@@ -163,6 +163,15 @@ export default function EditSubscribers() {
             >
               <div className="mb-2">
                 <p className="font-semibold text-sm sm:text-base truncate">{sub.email}</p>
+              </div>
+
+              <div className="mb-2">
+                <label className="block text-xs font-medium text-gray-700">
+                  Affiliate
+                </label>
+                <p className="text-sm text-gray-800 truncate">
+                  {sub.affiliate || '—'}
+                </p>
               </div>
 
               <label className="block mb-2 text-xs font-medium text-gray-700">
