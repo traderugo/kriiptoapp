@@ -144,7 +144,6 @@ export default function Signals() {
             <span>❌ Losses: <strong className="text-red-600">{outcomesCount.losses}</strong></span>
             <span>⚖️ Breakeven: <strong className="text-yellow-600">{outcomesCount.breakeven}</strong></span>
             <span>📊 Win Rate: <strong className="text-blue-600">{winRate}%</strong></span>
-            <span>📈 Total RR (Wins Only): <strong className="text-purple-600">{outcomesCount.totalRR.toFixed(2)}</strong></span>
             <span>📈 Derived RR (Wins Only): <strong className="text-purple-600">{(outcomesCount.totalRR-outcomesCount.losses).toFixed(2)}</strong></span>
           </div>
 
@@ -177,7 +176,7 @@ export default function Signals() {
                     SL: {signal.sl}, TP: {signal.tp}<br />
                     RR: {rr}, <strong className=' space-y-1 bg-gray-50 text-blue-500'> {signal.outcome.toUpperCase()}</strong><br />
                     <small>Remarks: {signal.remarks}</small><br />
-                    <small>{signal.admin_email.replace(/@gmail\.com$/i, '')}</small><br />
+                    <small>{signal.admin_email}</small><br />
                     <hr />
                   </span>
                 </li>
