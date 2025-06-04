@@ -170,14 +170,14 @@ export default function Signals() {
                   <span>
                     <strong >
                       {new Date(signal.created_at).toLocaleString('en')} <br />
-                      <span  className=' space-y-1 bg-gray-50 text-green-800'>{signal.direction === 'buy' ? '📈 LONG' : '📉 SHORT'} {signal.pair.toUpperCase()}/USDT <br />ENTRY: {signal.entry}</span>
+                      <span  className=' space-y-1 bg-gray-50 text-green-800'>{signal.direction === 'buy' ? '📈 LONG' : '📉 SHORT'} {signal.pair.toUpperCase()}/USDT <hr />ENTRY: {signal.entry}</span>
                     </strong>
                     <br />
                     SL: {signal.sl}, TP: {signal.tp}<br />
                     RR: {rr}, <strong className=' space-y-1 bg-gray-50 text-blue-500'> {signal.outcome.toUpperCase()}</strong><br />
                     <small>Remarks: {signal.remarks}</small><br />
                     <small>{signal.admin_email}</small><br />
-                    <hr />
+                    
                   </span>
                 </li>
               );
