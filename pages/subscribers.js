@@ -76,30 +76,6 @@ export default function EditSubscribers() {
     return () => clearInterval(interval);
   }, [subscribers]);
 
-  const handleRemarksChange = async (id, newRemarks) => {
-    const { error } = await supabase.from('subscribers').update({ remarks: newRemarks }).eq('id', id);
-
-    if (!error) {
-      setSubscribers((prev) =>
-        prev.map((sub) => (sub.id === id ? { ...sub, remarks: newRemarks } : sub))
-      );
-    } else {
-      alert('Error updating remarks.');
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this subscriber?')) return;
-
-    const { error } = await supabase.from('subscribers').delete().eq('id', id);
-
-    if (!error) {
-      setSubscribers((prev) => prev.filter((sub) => sub.id !== id));
-    } else {
-      alert('Error deleting subscriber.');
-    }
-  };
-
   const filteredSubscribers = useMemo(() => {
     return subscribers.filter((sub) => {
       const emailMatch = sub.email.toLowerCase().includes(search.toLowerCase());
@@ -143,55 +119,52 @@ export default function EditSubscribers() {
         <p className="text-center text-gray-500">No subscribers found.</p>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
-          {filteredSubscribers.map((sub) => (
-            <div
-              key={sub.id}
-              className="border rounded-lg p-4 shadow hover:shadow-md transition-shadow bg-white"
-            >
-              <div className="mb-2">
-                <p className="font-semibold text-sm sm:text-base truncate">{sub.email}</p>
+          {filteredSubscribers.map((sub) => {
+            const isExpired = countdowns[sub.id] === 'Expired';
+
+            return (
+              <div
+                key={sub.id}
+                className={`border rounded-lg p-4 shadow hover:shadow-md transition-shadow bg-white ${
+                  isExpired ? 'opacity-80' : ''
+                }`}
+              >
+                <div className="mb-2">
+                  <p className="font-semibold text-sm sm:text-base truncate">{sub.email}</p>
+                </div>
+
+                <div className="mb-2">
+                  <label className="block text-xs font-medium text-gray-700">Affiliate</label>
+                  <p className="text-sm text-gray-800 truncate">{sub.affiliate || '—'}</p>
+                </div>
+
+                <div className="mb-2">
+                  <label className="block text-xs font-medium text-gray-700">Expiry</label>
+                  <p className="text-sm text-gray-800">
+                    {new Date(sub.expiry).toLocaleString()}
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between text-xs mb-2">
+                  <p className="text-red-600 font-mono">
+                    Time Left: {countdowns[sub.id] || '...'}
+                  </p>
+                  <span
+                    className={`ml-2 px-2 py-0.5 rounded text-white text-[10px] ${
+                      isExpired ? 'bg-gray-500' : 'bg-green-600'
+                    }`}
+                  >
+                    {isExpired ? 'Expired' : 'Active'}
+                  </span>
+                </div>
+
+                <label className="block mb-1 text-xs font-medium text-gray-700">Remarks</label>
+                <p className="text-xs sm:text-sm text-gray-700 bg-gray-100 px-2 py-1 rounded">
+                  {sub.remarks || '—'}
+                </p>
               </div>
-
-              <div className="mb-2">
-                <label className="block text-xs font-medium text-gray-700">Affiliate</label>
-                <p className="text-sm text-gray-800 truncate">{sub.affiliate || '—'}</p>
-              </div>
-
-              <label className="block mb-2 text-xs font-medium text-gray-700">
-                Expiry
-                <input
-                  type="datetime-local"
-                  value={new Date(sub.expiry).toISOString().slice(0, 16)}
-                  readOnly
-                  className="mt-1 w-full border rounded px-2 py-1 text-xs sm:text-sm bg-gray-100 cursor-not-allowed"
-                />
-              </label>
-
-              <p className="text-red-600 font-mono text-xs mb-2">
-                Time Left: {countdowns[sub.id] || '...'}
-              </p>
-
-              <label className="block mb-3 text-xs font-medium text-gray-700">
-                Remarks
-                <input
-                  type="text"
-                  defaultValue={sub.remarks || ''}
-                  onBlur={(e) => handleRemarksChange(sub.id, e.target.value)}
-                  className="mt-1 w-full border rounded px-2 py-1 text-xs sm:text-sm"
-                />
-              </label>
-
-              <div className="flex items-center justify-between">
-                <span className="text-green-600 text-xs">Auto-saves</span>
-                <button
-                  onClick={() => handleDelete(sub.id)}
-                  className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-xs"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
