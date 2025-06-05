@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabase';
-import TelegramDMAccessBanner from "../components/Cta";
 import Link from 'next/link';
 
 export default function AdminPage() {
@@ -45,16 +44,13 @@ export default function AdminPage() {
 
   const adminLinks = [
     { href: "/signals", title: "Signals", description: "List of signals" },
-    { href: "/mentorship", title: "Mentorship", description: "Courses on Trading Futures" },
-    { href: "/", title: "Calculator", description: "Go to Trade Calculator" },
-    { href: "/admin", title: "Admin", description: "Add signals and view subscribers" },
+    { href: "/add-signals", title: "Publish Signals", description: "Admin" },
+    { href: "/edit-subscribers", title: "Subscribers", description: "Super-Admin" },
+    { href: "/page-admin", title: "Subscribers", description: "Super-Admin" },
   ];
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <TelegramDMAccessBanner />
-              <hr />
-              <br />
               <br />
       <div className="grid gap-6 md:grid-cols-2">
               
