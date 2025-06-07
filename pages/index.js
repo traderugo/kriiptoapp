@@ -69,8 +69,9 @@ export default function Home() {
         <PWAInstallPrompt />
       <PWAiOSBanner />
          <hr />
+         <br />
          <h2 className="text-2xl font-bold  mb-2">
-  Unlock VIP Signals—Your Edge in the Market Starts Here
+  Unlock VIP Signals and Mentorship — Your Edge in the Market Starts Here
 </h2>
         <h3 className="text-2xl font-bold mb-4 text-center">Sign in to join</h3>
 
