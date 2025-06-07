@@ -167,12 +167,7 @@ function PricingCard({ title, price, features, popular }) {
           </li>
         ))}
       </ul>
-      <a
-        href="mailto:ugo@cryptomentor.com?subject=Enroll%20in%20Crypto%20Futures%20Mentorship"
-        className="mt-auto bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg text-center"
-      >
-        Enroll
-      </a>
+    
     </div>
   );
 }
