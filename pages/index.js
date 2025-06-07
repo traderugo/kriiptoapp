@@ -73,19 +73,14 @@ export default function Home() {
          <h2 className="text-2xl font-bold  mb-2">
   <section className="bg-white text-gray-900 py-24 px-6 text-center">
   <div className="max-w-4xl mx-auto">
-    <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
+    <h3 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
       Unlock <span className="text-green-600">VIP Signals</span> and <span className="text-blue-600">Mentorship</span> —<br />
       <span className="text-gray-700">Your Edge in the Market Starts Here</span>
-    </h1>
+    </h3>
     <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10">
       Access precision entries, risk-managed setups, and expert guidance from Ugo himself. Dominate the charts — not your emotions.
     </p>
-    <a
-      href="#pricing"
-      className="inline-block bg-gradient-to-r from-green-400 to-blue-500 text-white font-bold py-4 px-10 rounded-lg shadow-lg hover:from-green-500 hover:to-blue-600 transition"
-    >
-      Get Started
-    </a>
+ 
   </div>
 </section>
 
