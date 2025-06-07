@@ -68,8 +68,7 @@ export default function Home() {
         <br />
         <PWAInstallPrompt />
       <PWAiOSBanner />
-         <hr />
-         <br />
+       
          <h2 className="text-2xl font-bold  mb-2">
   <section className="bg-white text-gray-900 py-24 px-6 text-center">
   <div className="max-w-4xl mx-auto">
