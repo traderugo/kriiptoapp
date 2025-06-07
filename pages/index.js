@@ -70,7 +70,7 @@ export default function Home() {
       <PWAiOSBanner />
        
          <h2 className="text-2xl font-bold  mb-2">
-  <section className="bg-white text-gray-900 py-24 px-6 text-center">
+  <section className="bg-white text-gray-900 py-24 px-3 text-center">
   <div className="max-w-4xl mx-auto">
     <h3 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
       Unlock <span className="text-green-600">VIP Signals</span> and <span className="text-blue-600">Mentorship</span> —<br />
