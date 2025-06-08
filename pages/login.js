@@ -56,37 +56,54 @@ export default function Home() {
   <Image src="/logo.png" alt="Logo" width={150} height={150} />
 </Link></div>
       <div className="space-x-4 bg-indigo-500 text-white p-2 rounded">
-        <Link href="/home"></Link>
+        <Link href="/mentorship">Academy</Link>
       </div>
     </nav>
       <div className="bg-white p-6 w-full max-w-md">
-        <Calculator />
-       <StickyShareBar url={"https://kryptokave.vercel.app"} message={"Check out this trading calculator that helps manage risk like a pro! 📊"} />
-      <br />
-       <hr />
-        <MasterclassBanner />
-        <br />
-        <PWAInstallPrompt />
-      <PWAiOSBanner />
+      
        
          <h2 className="text-2xl font-bold  mb-2">
-  <section className="bg-white text-gray-900 py-24 px-3 text-center">
-  <div className="max-w-4xl mx-auto">
-    <h3 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
-      Unlock <span className="text-green-600">VIP Signals</span> and <span className="text-blue-600">Mentorship</span> —<br />
-      <span className="text-gray-700">Your Edge in the Market Starts Here</span>
-    </h3>
-    <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10">
-      Access precision entries, risk-managed setups, and expert guidance. Dominate the charts — not your emotions.
-    </p>
- 
-  </div>
-</section>
 
 </h2>
         <h3 className="text-2xl font-bold mb-4 text-center">Sign in to join</h3>
 
-       
+        {!user ? (
+          <>
+            <input
+              type="email"
+              className="w-full p-2 mb-4 border rounded"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <button
+              onClick={login}
+              className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+            >
+              Get Login Link
+            </button>
+          </>
+        ) : (
+          <>
+            <p className="mb-2">Logged in as: {user.email}</p>
+
+<br />
+                      <Link
+            href="/home"
+            className="block p-6 rounded-2xl shadow-md border border-gray-200 bg-white hover:shadow-lg hover:border-blue-500 transition"
+          >
+            <h2 className="text-xl font-semibold mb-2 text-blue-600">Go to Signals Portal</h2>
+          </Link><br />
+            <button
+              onClick={logout}
+              className="mb-4 bg-red-600 text-white p-2 rounded hover:bg-red-700"
+            >
+              Log Out
+            </button>
+
+  
+          </>
+        )}
       </div>
        <br />
         
