@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
-import StickyShareBar from '../components/StickyShareBar';
-import MasterclassBanner from '../components/MasterclassBanner';
-import PWAInstallPrompt from '../components/PWAInstallPrompt';
-import PWAiOSBanner from '../components/PWAiOSBanner';
-
-import Calculator from "../components/Calculator";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -51,14 +45,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-     <nav className="bg-white w-full p-4 flex justify-between sticky top-0 z-50 shadow">
-      <div className="font-bold"><Link href="/">
-  <Image src="/logo.png" alt="Logo" width={150} height={150} />
-</Link></div>
-      <div className="space-x-4 bg-indigo-500 text-white p-2 rounded">
-        <Link href="/mentorship">Academy</Link>
-      </div>
-    </nav>
+
       <div className="bg-white p-6 w-full max-w-md">
       
        
@@ -92,7 +79,7 @@ export default function Home() {
             href="/home"
             className="block p-6 rounded-2xl shadow-md border border-gray-200 bg-white hover:shadow-lg hover:border-blue-500 transition"
           >
-            <h2 className="text-xl font-semibold mb-2 text-blue-600">Go to Signals Portal</h2>
+            <h2 className="text-xl font-semibold mb-2 text-blue-600">Login</h2>
           </Link><br />
             <button
               onClick={logout}
@@ -107,17 +94,7 @@ export default function Home() {
       </div>
        <br />
         
-      <footer className="mt-12 text-center text-sm text-gray-500 flex justify-center items-center space-x-2">
-        <span>Made with&nbsp;❤️&nbsp; by</span>
-      <a
-        href="https://twitter.com/trader_ugo"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="font-semibold text-blue-600 hover:underline"
-      >
-        Trader Ugo
-      </a> <br />
-</footer>
+ 
 
     </main>
   );
