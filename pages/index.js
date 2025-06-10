@@ -69,21 +69,7 @@ export default function Home() {
         <PWAInstallPrompt />
       <PWAiOSBanner />
        
-         <h2 className="text-2xl font-bold  mb-2">
-  <section className="bg-white text-gray-900 py-24 px-3 text-center">
-  <div className="max-w-4xl mx-auto">
-    <h3 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
-      Unlock <span className="text-green-600">VIP Signals</span> and <span className="text-blue-600">Mentorship</span> —<br />
-      <span className="text-gray-700">Your Edge in the Market Starts Here</span>
-    </h3>
-    <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10">
-      Access precision entries, risk-managed setups, and expert guidance. Dominate the charts — not your emotions.
-    </p>
  
-  </div>
-</section>
-
-</h2>
 <div className="flex items-center justify-center ">        
   <Link href="/login">
       <a className="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition">
