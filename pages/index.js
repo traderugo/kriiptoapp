@@ -86,7 +86,7 @@ export default function Home() {
 </h2>
 <div className="flex items-center justify-center min-h-screen">        
   <Link href="/login">
-      <a className="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition">
+      <a className="inline-block px-6  bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition">
         Sign in to join
       </a>
     </Link>
