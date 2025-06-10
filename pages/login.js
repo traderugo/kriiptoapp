@@ -79,7 +79,7 @@ export default function Home() {
             href="/home"
             className="block p-6 rounded-2xl shadow-md border border-gray-200 bg-white hover:shadow-lg hover:border-blue-500 transition"
           >
-            <h2 className="text-xl font-semibold mb-2 text-blue-600">Login</h2>
+            <h2 className="text-xl font-semibold mb-2 text-blue-600">Go to home</h2>
           </Link><br />
             <button
               onClick={logout}
