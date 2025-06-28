@@ -69,14 +69,19 @@ export default function Home() {
         <PWAInstallPrompt />
       <PWAiOSBanner />
        
- 
-<div className="flex items-center justify-center ">        
-  <Link href="/login">
-      <a className="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition">
-        Sign in to join
-      </a>
-    </Link>
-    </div>   
+<div className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-10 px-6 rounded-2xl shadow-xl flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-6 mt-10">
+      <div>
+        <h2 className="text-2xl md:text-3xl font-bold">Want the latest signals?</h2>
+        <p className="text-sm md:text-base mt-1 text-blue-100">
+          Sign in to get exclusive access to sniper-level entries, exits, and RR.
+        </p>
+      </div>
+      <Link href="/login">
+        <a className="px-6 py-3 bg-white text-blue-700 font-bold rounded-xl shadow-lg hover:bg-blue-100 transition-all duration-300">
+          Sign In Now
+        </a>
+      </Link>
+    </div>  
       </div>
        <br />
         
